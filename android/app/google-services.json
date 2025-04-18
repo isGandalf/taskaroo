@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "915695159918",
+    "project_id": "taskaroo-todo-app",
+    "storage_bucket": "taskaroo-todo-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915695159918:android:e20437a7e2abe3c8b5f47f",
+        "android_client_info": {
+          "package_name": "com.example.taskaroo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB31KERs5Ce2PvQzLGaA-2oQJ-5RMa5Z0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
