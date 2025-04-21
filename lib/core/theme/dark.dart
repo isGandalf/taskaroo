@@ -38,4 +38,10 @@ ThemeData darkTheme = ThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     ),
   ),
+  textTheme: TextTheme(
+    bodyMedium: TextStyle(
+      color: Colors.grey.shade300,
+      fontWeight: FontWeight.w500,
+    ),
+  ),
 );

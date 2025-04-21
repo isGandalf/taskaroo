@@ -3,20 +3,33 @@ part of 'user_auth_bloc.dart';
 @immutable
 sealed class UserAuthState {}
 
+// S I G N   U P
 final class UserAuthInitial extends UserAuthState {}
 
-// initial page load
-final class UserAuthPageLoadIntialState extends UserAuthState {}
+final class UserAuthActionState extends UserAuthState {}
 
 // after button click loading state
-final class UserAuthPageLoadingState extends UserAuthState {}
+final class SignUpButtonClickLoadingState extends UserAuthActionState {}
 
 // upon successful authentication
-final class UserAuthSuccessState extends UserAuthState {
-  final UserEntity entity;
-
-  UserAuthSuccessState({required this.entity});
-}
+final class UserAuthSuccessState extends UserAuthActionState {}
 
 // upon failed authentication
-final class UserAuthFailureState extends UserAuthState {}
+final class UserAuthFailureState extends UserAuthActionState {}
+
+// Navigate to sign in page state
+final class RedirectToSignInPageState extends UserAuthActionState {}
+
+// // Navigate to sign in page state
+// final class RedirectToSignUpPageState extends UserAuthActionState {}
+
+// L O G I N
+final class LogInButtonClickLoadingState extends UserAuthActionState {}
+
+final class LoginFailedState extends UserAuthActionState {}
+
+final class LoginSuccessState extends UserAuthActionState {
+  final UserEntity userEntity;
+
+  LoginSuccessState({required this.userEntity});
+}

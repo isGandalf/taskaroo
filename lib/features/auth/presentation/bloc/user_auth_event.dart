@@ -18,3 +18,14 @@ final class CreateAccountButtonPressedEvent extends UserAuthEvent {
     required this.password,
   });
 }
+
+final class SignInLinkTextPressed extends UserAuthEvent {}
+
+// final class SignUpLinkTextPressed extends UserAuthEvent {}
+
+final class SignInButtonPressedEvent extends UserAuthEvent {
+  final String email;
+  final String password;
+
+  SignInButtonPressedEvent({required this.email, required this.password});
+}

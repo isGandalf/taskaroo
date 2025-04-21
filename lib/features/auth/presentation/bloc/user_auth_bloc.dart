@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:dart_either/dart_either.dart';
 import 'package:meta/meta.dart';
 import 'package:taskaroo/features/auth/domain/entity/user_entity.dart';
 import 'package:taskaroo/features/auth/domain/usecases/auth_usecase.dart';
@@ -13,21 +12,18 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
   final AuthUsecase authUsecase;
 
   UserAuthBloc(this.authUsecase) : super(UserAuthInitial()) {
-    on<UserAuthPageLoadedEvent>(userAuthPageLoadedEvent);
     on<CreateAccountButtonPressedEvent>(createAccountButtonPressedEvent);
-  }
-  FutureOr<void> userAuthPageLoadedEvent(
-    UserAuthPageLoadedEvent event,
-    Emitter<UserAuthState> emit,
-  ) {
-    emit(UserAuthPageLoadIntialState());
+    on<SignInButtonPressedEvent>(signInButtonPressedEvent);
+    //on<SignInLinkTextPressed>(signInLinkTextPressed);
+    //on<SignUpLinkTextPressed>(signUpLinkTextPressed);
   }
 
   FutureOr<void> createAccountButtonPressedEvent(
     CreateAccountButtonPressedEvent event,
     Emitter<UserAuthState> emit,
   ) async {
-    emit(UserAuthPageLoadingState());
+    emit(SignUpButtonClickLoadingState());
+    await Future.delayed(Duration(seconds: 2));
     final entity = await authUsecase.userSignUp(
       event.firstName,
       event.lastName,
@@ -40,7 +36,26 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
         emit(UserAuthFailureState());
       },
       ifRight: (userEntity) {
-        emit(UserAuthSuccessState(entity: userEntity));
+        emit(UserAuthSuccessState());
+      },
+    );
+  }
+
+  FutureOr<void> signInButtonPressedEvent(
+    SignInButtonPressedEvent event,
+    Emitter<UserAuthState> emit,
+  ) async {
+    emit(LogInButtonClickLoadingState());
+    final entity = await authUsecase.userLogin(event.email, event.password);
+
+    return entity.fold(
+      ifLeft: (failure) {
+        print('Failed state');
+        emit(LoginFailedState());
+      },
+      ifRight: (userEntity) async {
+        print('success state');
+        emit(LoginSuccessState(userEntity: userEntity));
       },
     );
   }

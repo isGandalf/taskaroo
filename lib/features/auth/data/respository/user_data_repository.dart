@@ -25,7 +25,23 @@ class UserDataRepository implements UserDomainRepository {
     String email,
     String password,
   ) async {
-    return Left(UserModelError(getErrorMessage: 'test'));
+    final Either<FirebaseAuthError, UserModel> model = await userAuth.userLogin(
+      email,
+      password,
+    );
+
+    return model.fold(
+      ifLeft: (failure) {
+        return Left(
+          UserModelError(
+            getErrorMessage: failure.firebaseAuthException.message.toString(),
+          ),
+        );
+      },
+      ifRight: (userModel) {
+        return Right(userModel.toEntity());
+      },
+    );
   }
 
   @override
@@ -41,7 +57,9 @@ class UserDataRepository implements UserDomainRepository {
     return model.fold(
       ifLeft: (failure) {
         return Left(
-          UserModelError(getErrorMessage: 'Some issue with Firebase'),
+          UserModelError(
+            getErrorMessage: failure.firebaseAuthException.message.toString(),
+          ),
         );
       },
       ifRight: (userModel) {

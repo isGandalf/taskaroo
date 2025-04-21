@@ -38,4 +38,10 @@ ThemeData lightTheme = ThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     ),
   ),
+  textTheme: TextTheme(
+    bodyMedium: TextStyle(
+      color: Colors.grey.shade900,
+      fontWeight: FontWeight.w500,
+    ),
+  ),
 );

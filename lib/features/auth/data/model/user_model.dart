@@ -21,4 +21,18 @@ class UserModel {
       uid: uid,
     );
   }
+
+  factory UserModel.fromFirestoreMap(
+    String firstName,
+    String lastName,
+    String email,
+    String uid,
+  ) {
+    return UserModel(
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      uid: uid,
+    );
+  }
 }

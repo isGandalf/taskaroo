@@ -21,4 +21,11 @@ class AuthUsecase {
       password,
     );
   }
+
+  Future<Either<UserModelError, UserEntity>> userLogin(
+    String email,
+    String password,
+  ) {
+    return userDomainRepository.userLogin(email, password);
+  }
 }

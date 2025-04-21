@@ -11,6 +11,9 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(actions: [ThemeSwitch()]));
+    return Scaffold(
+      appBar: AppBar(toolbarHeight: 68, actions: [ThemeSwitch()]),
+      body: Center(child: Text('This is homepage')),
+    );
   }
 }

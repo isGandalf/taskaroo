@@ -1,12 +1,14 @@
 import 'package:dart_either/dart_either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:logger/logger.dart';
 import 'package:taskaroo/core/errors/errors.dart';
 import 'package:taskaroo/features/auth/data/model/user_model.dart';
 
 class UserAuth {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
+  final _logger = Logger();
 
   UserAuth({required this.firebaseAuth, required this.firebaseFirestore});
 
@@ -29,7 +31,7 @@ class UserAuth {
           'email': email,
           'uid': user.uid,
         });
-
+        _logger.d('User created and transferred to Model');
         return Right(
           UserModel(
             firstName: firstName,
@@ -41,15 +43,77 @@ class UserAuth {
       } else {
         return Left(
           FirebaseAuthError(
-            firebaseAuthException: FirebaseException(
-              plugin: 'Create account error',
-              message: 'Unable to create user account',
+            firebaseAuthException: FirebaseAuthException(
+              code: 'User Model',
+              message: 'User model transfer error when creating user.',
             ),
           ),
         );
       }
-    } on Exception catch (e) {
-      throw 'An unexpected error occured :: $e';
+    } catch (e) {
+      return Left(
+        FirebaseAuthError(
+          firebaseAuthException: FirebaseException(
+            plugin: 'Firebase sign up error',
+            message: 'Unexpected error occured during sign up :: $e',
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<Either<FirebaseAuthError, UserModel>> userLogin(
+    String email,
+    String password,
+  ) async {
+    try {
+      final UserCredential userCredential = await firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
+      final User? user = userCredential.user;
+
+      if (user == null) {
+        return Left(
+          FirebaseAuthError(
+            firebaseAuthException: FirebaseException(
+              plugin: 'No user',
+              message: 'No user found',
+            ),
+          ),
+        );
+      }
+
+      final DocumentSnapshot<Map<String, dynamic>> userData =
+          await firebaseFirestore.collection('users').doc(user.uid).get();
+      final dataReceived = userData.data();
+      if (dataReceived != null) {
+        final userModel = UserModel.fromFirestoreMap(
+          dataReceived['firstName'] as String,
+          dataReceived['lastName'] as String,
+          dataReceived['email'] as String,
+          user.uid,
+        );
+        _logger.d('Data received and transferred to Model');
+        return Right(userModel);
+      } else {
+        return Left(
+          FirebaseAuthError(
+            firebaseAuthException: FirebaseAuthException(
+              code: 'User Model',
+              message: 'User Model transfer error on login authentication',
+            ),
+          ),
+        );
+      }
+    } catch (el, stackTrace) {
+      _logger.e('Firebase login error: $el', stackTrace: stackTrace);
+      return Left(
+        FirebaseAuthError(
+          firebaseAuthException: FirebaseException(
+            plugin: 'Firebase login error',
+            message: 'Unexpected error occured',
+          ),
+        ),
+      );
     }
   }
 }

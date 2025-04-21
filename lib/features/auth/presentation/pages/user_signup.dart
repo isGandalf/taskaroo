@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:taskaroo/features/auth/presentation/bloc/user_auth_bloc.dart';
-import 'package:taskaroo/features/auth/presentation/widgets/custom_buttons.dart';
-import 'package:taskaroo/features/auth/presentation/widgets/text_fields.dart';
-import 'package:taskaroo/features/auth/presentation/widgets/text_widgets.dart';
+import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
+import 'package:taskaroo/features/auth/presentation/widgets/signup_form.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/theme_switch.dart';
+import 'package:taskaroo/features/auth/presentation/pages/user_login.dart';
 
 class UserSignup extends StatefulWidget {
   const UserSignup({super.key});
@@ -19,140 +20,75 @@ class _UserSignupState extends State<UserSignup> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final _logger = Logger();
 
   @override
   void initState() {
     super.initState();
-    context.read<UserAuthBloc>().add(UserAuthPageLoadedEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
+    return BlocListener<UserAuthBloc, UserAuthState>(
+      listenWhen: (previous, current) => current is UserAuthActionState,
+      listener: (context, state) async {
+        _logger.d('${state.runtimeType}');
+
+        // After create account button clicked
+        if (state is SignUpButtonClickLoadingState) {
+          showCustomSnackbar(
+            context,
+            'Creating user profile...',
+            Colors.blue.shade800,
+          );
+        }
+        // Upon unsuccessful account creation
+        else if (state is UserAuthFailureState) {
+          showCustomSnackbar(
+            context,
+            'Failed to create user account. Please try again.',
+            Colors.red.shade800,
+          );
+        }
+        // Upon successful account creation
+        else if (state is UserAuthSuccessState) {
+          showCustomSnackbar(
+            context,
+            'User created. Please login',
+            Colors.green.shade800,
+          );
+          await Future.delayed(Duration(seconds: 2));
+          if (!context.mounted) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const UserLogin()),
+          );
+        }
+        // Upon tapping the text Link
+        else if (state is RedirectToSignInPageState) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const UserLogin()),
+          );
+        }
       },
-      child: BlocConsumer<UserAuthBloc, UserAuthState>(
-        listenWhen: (previous, current) => current is UserAuthPageLoadingState,
-        listener: (context, state) {
-          if (state is UserAuthPageLoadingState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Creating user profile...'),
-                backgroundColor: Colors.green.shade800,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: AppBar(toolbarHeight: 68, actions: [ThemeSwitch()]),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: SingleChildScrollView(
+              child: SignupForm(
+                formKey: _formKey,
+                firstNameController: firstNameController,
+                lastNameController: lastNameController,
+                emailController: emailController,
+                passwordController: passwordController,
               ),
-            );
-          } else if (state is UserAuthFailureState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Failed to create user account. Please try again.',
-                ),
-                backgroundColor: Colors.red.shade800,
-              ),
-            );
-          } else if (state is UserAuthSuccessState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('User created'),
-                backgroundColor: Colors.blue.shade800,
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          print(state.runtimeType);
-          switch (state) {
-            case UserAuthPageLoadIntialState():
-              return Scaffold(
-                appBar: AppBar(toolbarHeight: 68, actions: [ThemeSwitch()]),
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          AuthPageHeading.mainHeading('Sign Up.'),
-                          const SizedBox(height: 100),
-                          TextFields.textFeilds(
-                            firstNameController,
-                            'First Name',
-                          ),
-                          const SizedBox(height: 20),
-                          TextFields.textFeilds(
-                            lastNameController,
-                            'Last Name',
-                          ),
-                          const SizedBox(height: 20),
-                          TextFields.textFeilds(emailController, 'Email'),
-                          const SizedBox(height: 20),
-                          TextFields.textFeilds(
-                            passwordController,
-                            'Password',
-                            true,
-                          ),
-                          const SizedBox(height: 30),
-                          CustomButtons(
-                            formKey: _formKey,
-                            text: 'Create account',
-                            firstName: firstNameController,
-                            lastName: lastNameController,
-                            email: emailController,
-                            password: passwordController,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            default:
-              return Scaffold(
-                appBar: AppBar(toolbarHeight: 68, actions: [ThemeSwitch()]),
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          AuthPageHeading.mainHeading('Sign Up.'),
-                          const SizedBox(height: 100),
-                          TextFields.textFeilds(
-                            firstNameController,
-                            'First Name',
-                          ),
-                          const SizedBox(height: 20),
-                          TextFields.textFeilds(
-                            lastNameController,
-                            'Last Name',
-                          ),
-                          const SizedBox(height: 20),
-                          TextFields.textFeilds(emailController, 'Email'),
-                          const SizedBox(height: 20),
-                          TextFields.textFeilds(
-                            passwordController,
-                            'Password',
-                            true,
-                          ),
-                          const SizedBox(height: 30),
-                          CustomButtons(
-                            formKey: _formKey,
-                            text: 'Create account',
-                            firstName: firstNameController,
-                            lastName: lastNameController,
-                            email: emailController,
-                            password: passwordController,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-          }
-        },
+            ),
+          ),
+        ),
       ),
     );
   }

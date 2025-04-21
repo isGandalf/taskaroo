@@ -5,36 +5,57 @@ import 'package:taskaroo/features/auth/presentation/bloc/user_auth_bloc.dart';
 class CustomButtons extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final String text;
-  final TextEditingController firstName;
-  final TextEditingController lastName;
+  final TextEditingController? firstName;
+  final TextEditingController? lastName;
   final TextEditingController email;
   final TextEditingController password;
+  final bool isLogin;
 
   const CustomButtons({
     super.key,
+
     required this.formKey,
     required this.text,
-    required this.firstName,
-    required this.lastName,
+    this.firstName,
+    this.lastName,
     required this.email,
     required this.password,
+    required this.isLogin,
   });
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return SizedBox(
       width: double.infinity,
       height: 60,
       child: ElevatedButton(
         onPressed: () {
           if (formKey.currentState!.validate()) {
-            context.read<UserAuthBloc>().add(
-              CreateAccountButtonPressedEvent(
-                firstName: firstName.text,
-                lastName: lastName.text,
-                email: email.text,
-                password: password.text,
+            if (isLogin) {
+              print('Login button - $isLogin');
+              context.read<UserAuthBloc>().add(
+                SignInButtonPressedEvent(
+                  email: email.text,
+                  password: password.text,
+                ),
+              );
+            } else {
+              print('Sign up button - $isLogin');
+              context.read<UserAuthBloc>().add(
+                CreateAccountButtonPressedEvent(
+                  firstName: firstName!.text,
+                  lastName: lastName!.text,
+                  email: email.text,
+                  password: password.text,
+                ),
+              );
+            }
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Please fill in all required fields before proceeding',
+                ),
               ),
             );
           }

@@ -25,7 +25,10 @@ class TextFields {
         return null;
       },
       controller: controller,
-      decoration: InputDecoration(hintText: hintText),
+      decoration: InputDecoration(
+        hintText: hintText,
+        errorStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+      ),
       obscureText: isObscure,
     );
   }
