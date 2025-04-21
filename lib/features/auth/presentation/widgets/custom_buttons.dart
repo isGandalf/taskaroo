@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taskaroo/features/auth/presentation/bloc/user_auth_bloc.dart';
+import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_bloc.dart';
 
 class CustomButtons extends StatelessWidget {
   final GlobalKey<FormState> formKey;

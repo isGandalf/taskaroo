@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
-import 'package:taskaroo/features/auth/presentation/bloc/user_auth_bloc.dart';
+import 'package:taskaroo/features/auth/presentation/bloc/homepage/bloc/homepage_bloc.dart';
+import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/pages/homepage.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/login_form.dart';
@@ -47,7 +48,9 @@ class _UserLoginState extends State<UserLogin> {
           if (!context.mounted) return;
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => Homepage()),
+            MaterialPageRoute(
+              builder: (context) => Homepage(userEntity: state.userEntity),
+            ),
             (route) => false,
           );
         }

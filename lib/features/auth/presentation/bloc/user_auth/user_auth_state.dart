@@ -33,3 +33,8 @@ final class LoginSuccessState extends UserAuthActionState {
 
   LoginSuccessState({required this.userEntity});
 }
+
+// S I G N   O U T
+final class SignOutSuccessState extends UserAuthState {}
+
+final class SignOutFailedState extends UserAuthState {}

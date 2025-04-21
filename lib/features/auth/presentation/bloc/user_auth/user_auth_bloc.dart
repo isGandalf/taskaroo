@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:taskaroo/features/auth/domain/entity/user_entity.dart';
 import 'package:taskaroo/features/auth/domain/usecases/auth_usecase.dart';
@@ -10,10 +11,12 @@ part 'user_auth_state.dart';
 
 class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
   final AuthUsecase authUsecase;
+  final _logger = Logger();
 
   UserAuthBloc(this.authUsecase) : super(UserAuthInitial()) {
     on<CreateAccountButtonPressedEvent>(createAccountButtonPressedEvent);
     on<SignInButtonPressedEvent>(signInButtonPressedEvent);
+    on<SignOutButtonPressedEvent>(signOutButtonPressedEvent);
     //on<SignInLinkTextPressed>(signInLinkTextPressed);
     //on<SignUpLinkTextPressed>(signUpLinkTextPressed);
   }
@@ -50,13 +53,27 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
 
     return entity.fold(
       ifLeft: (failure) {
-        print('Failed state');
+        _logger.e('Failed to Sign in');
         emit(LoginFailedState());
       },
       ifRight: (userEntity) async {
-        print('success state');
+        _logger.d('Sign in success');
         emit(LoginSuccessState(userEntity: userEntity));
       },
     );
+  }
+
+  FutureOr<void> signOutButtonPressedEvent(
+    SignOutButtonPressedEvent event,
+    Emitter<UserAuthState> emit,
+  ) async {
+    try {
+      await authUsecase.signOut();
+      _logger.d('Success sign out');
+      emit(SignOutSuccessState());
+    } catch (e) {
+      _logger.e('Unsuccessful sign out');
+      emit(SignOutFailedState());
+    }
   }
 }

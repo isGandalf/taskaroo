@@ -44,4 +44,12 @@ ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w500,
     ),
   ),
+  listTileTheme: ListTileThemeData(
+    titleTextStyle: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
+    contentPadding: EdgeInsets.all(15),
+  ),
 );

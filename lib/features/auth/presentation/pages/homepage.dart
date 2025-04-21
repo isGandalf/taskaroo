@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:taskaroo/features/auth/presentation/widgets/theme_switch.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:taskaroo/features/auth/domain/entity/user_entity.dart';
+import 'package:taskaroo/features/auth/presentation/bloc/homepage/bloc/homepage_bloc.dart';
+import 'package:taskaroo/features/auth/presentation/pages/homepage_view.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+class Homepage extends StatelessWidget {
+  final UserEntity userEntity;
+  const Homepage({super.key, required this.userEntity});
 
-  @override
-  State<Homepage> createState() => _HomepageState();
-}
-
-class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(toolbarHeight: 68, actions: [ThemeSwitch()]),
-      body: Center(child: Text('This is homepage')),
+    return BlocProvider(
+      create:
+          (context) =>
+              HomepageBloc()..add(LoadHomepageEvent(userEntity: userEntity)),
+      child: HomepageView(),
     );
   }
 }

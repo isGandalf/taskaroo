@@ -5,6 +5,7 @@ sealed class UserAuthEvent {}
 
 final class UserAuthPageLoadedEvent extends UserAuthEvent {}
 
+// account creation event
 final class CreateAccountButtonPressedEvent extends UserAuthEvent {
   final String firstName;
   final String lastName;
@@ -29,3 +30,7 @@ final class SignInButtonPressedEvent extends UserAuthEvent {
 
   SignInButtonPressedEvent({required this.email, required this.password});
 }
+
+// Sign out event
+
+final class SignOutButtonPressedEvent extends UserAuthEvent {}

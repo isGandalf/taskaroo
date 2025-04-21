@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taskaroo/features/auth/presentation/bloc/user_auth_bloc.dart';
+import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/pages/user_login.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/custom_buttons.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/rich_text_below_auth_page_button.dart';

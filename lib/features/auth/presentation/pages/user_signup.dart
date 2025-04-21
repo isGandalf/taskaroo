@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
-import 'package:taskaroo/features/auth/presentation/bloc/user_auth_bloc.dart';
+import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/signup_form.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/theme_switch.dart';

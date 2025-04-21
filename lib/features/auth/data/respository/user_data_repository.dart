@@ -1,4 +1,5 @@
 import 'package:dart_either/src/dart_either.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:taskaroo/core/errors/errors.dart';
 import 'package:taskaroo/features/auth/data/model/user_model.dart';
 import 'package:taskaroo/features/auth/data/sources/user_auth.dart';
@@ -17,7 +18,7 @@ class UserDataRepository implements UserDomainRepository {
 
   @override
   Future<void> signOut() {
-    throw UnimplementedError();
+    return userAuth.signOut();
   }
 
   @override

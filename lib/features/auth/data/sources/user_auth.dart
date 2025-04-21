@@ -8,6 +8,7 @@ import 'package:taskaroo/features/auth/data/model/user_model.dart';
 class UserAuth {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
+
   final _logger = Logger();
 
   UserAuth({required this.firebaseAuth, required this.firebaseFirestore});
@@ -114,6 +115,21 @@ class UserAuth {
           ),
         ),
       );
+    }
+  }
+
+  Future<Either<FirebaseAuthError, void>> signOut() async {
+    final currentUser = firebaseAuth.currentUser;
+    if (currentUser == null) {
+      _logger.d('User is null');
+      return Left(
+        FirebaseAuthError(
+          firebaseAuthException: FirebaseException(plugin: 'No user'),
+        ),
+      );
+    } else {
+      _logger.d('${currentUser.email} has been signed out');
+      return Right(await firebaseAuth.signOut());
     }
   }
 }

@@ -28,4 +28,8 @@ class AuthUsecase {
   ) {
     return userDomainRepository.userLogin(email, password);
   }
+
+  Future<void> signOut() {
+    return userDomainRepository.signOut();
+  }
 }

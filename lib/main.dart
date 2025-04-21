@@ -9,7 +9,7 @@ import 'package:taskaroo/features/auth/data/respository/user_data_repository.dar
 import 'package:taskaroo/features/auth/data/sources/user_auth.dart';
 import 'package:taskaroo/features/auth/domain/repository/user_domain_repository.dart';
 import 'package:taskaroo/features/auth/domain/usecases/auth_usecase.dart';
-import 'package:taskaroo/features/auth/presentation/bloc/user_auth_bloc.dart';
+import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/pages/user_signup.dart';
 import 'package:taskaroo/firebase_options.dart';
 
@@ -17,6 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseAuth.instance.signOut();
 
   // dependencies
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
