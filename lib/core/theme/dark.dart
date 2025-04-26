@@ -41,7 +41,7 @@ ThemeData darkTheme = ThemeData(
   textTheme: TextTheme(
     bodyMedium: TextStyle(
       color: Colors.grey.shade300,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
     ),
   ),
   listTileTheme: ListTileThemeData(
@@ -50,6 +50,5 @@ ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w600,
       color: Colors.white,
     ),
-    contentPadding: EdgeInsets.all(15),
   ),
 );

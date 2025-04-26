@@ -6,8 +6,8 @@ class TextFields {
 
   final String hintText;
 
-  TextFields({
-    this.isObscure = false,
+  TextFields(
+    this.isObscure, {
     required this.controller,
     required this.hintText,
   });
@@ -25,6 +25,7 @@ class TextFields {
         return null;
       },
       controller: controller,
+      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
       decoration: InputDecoration(
         hintText: hintText,
         errorStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),

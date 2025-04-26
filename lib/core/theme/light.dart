@@ -41,7 +41,7 @@ ThemeData lightTheme = ThemeData(
   textTheme: TextTheme(
     bodyMedium: TextStyle(
       color: Colors.grey.shade900,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
     ),
   ),
   listTileTheme: ListTileThemeData(
@@ -50,6 +50,5 @@ ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w600,
       color: Colors.grey.shade900,
     ),
-    contentPadding: EdgeInsets.all(15),
   ),
 );

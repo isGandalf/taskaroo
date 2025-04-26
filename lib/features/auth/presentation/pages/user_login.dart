@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
@@ -26,7 +27,7 @@ class _UserLoginState extends State<UserLogin> {
     return BlocListener<UserAuthBloc, UserAuthState>(
       listenWhen: (previous, current) => current is UserAuthActionState,
       listener: (context, state) async {
-        _logger.d('${state.runtimeType}');
+        //_logger.d('${state.runtimeType}');
 
         // Upon Login Button click
         if (state is LogInButtonClickLoadingState) {
@@ -46,10 +47,15 @@ class _UserLoginState extends State<UserLogin> {
           showCustomSnackbar(context, 'Login success!', Colors.green.shade800);
           await Future.delayed(Duration(seconds: 2));
           if (!context.mounted) return;
+          //final userId = FirebaseAuth.instance.currentUser;
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => Homepage(userEntity: state.userEntity),
+              builder:
+                  (context) => Homepage(
+                    userEntity: state.userEntity,
+                    userId: state.userEntity.uid,
+                  ),
             ),
             (route) => false,
           );

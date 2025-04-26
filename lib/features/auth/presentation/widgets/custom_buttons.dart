@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_bloc.dart';
+import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
 
 class CustomButtons extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -51,12 +52,10 @@ class CustomButtons extends StatelessWidget {
               );
             }
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Please fill in all required fields before proceeding',
-                ),
-              ),
+            showCustomSnackbar(
+              context,
+              "Please fill in all required fields before proceeding",
+              Colors.yellow.shade700,
             );
           }
         },

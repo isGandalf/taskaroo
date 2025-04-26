@@ -2,7 +2,7 @@ import 'package:dart_either/dart_either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logger/logger.dart';
-import 'package:taskaroo/core/errors/errors.dart';
+import 'package:taskaroo/core/errors/firebase_errors.dart';
 import 'package:taskaroo/features/auth/data/model/user_model.dart';
 
 class UserAuth {

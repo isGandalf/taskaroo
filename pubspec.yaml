@@ -48,6 +48,9 @@ dependencies:
   provider: ^6.1.4
   dart_either: ^2.0.0
   logger: ^2.5.0
+  path_provider: ^2.1.5
+  intl: ^0.20.2
+  expansion_tile_group: ^2.2.0
 
 dev_dependencies:
   flutter_test:

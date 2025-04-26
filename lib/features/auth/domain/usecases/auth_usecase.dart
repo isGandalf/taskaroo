@@ -1,5 +1,5 @@
 import 'package:dart_either/dart_either.dart';
-import 'package:taskaroo/core/errors/errors.dart';
+import 'package:taskaroo/core/errors/firebase_errors.dart';
 import 'package:taskaroo/features/auth/domain/entity/user_entity.dart';
 import 'package:taskaroo/features/auth/domain/repository/user_domain_repository.dart';
 

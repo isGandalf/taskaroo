@@ -1,6 +1,5 @@
 import 'package:dart_either/src/dart_either.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:taskaroo/core/errors/errors.dart';
+import 'package:taskaroo/core/errors/firebase_errors.dart';
 import 'package:taskaroo/features/auth/data/model/user_model.dart';
 import 'package:taskaroo/features/auth/data/sources/user_auth.dart';
 import 'package:taskaroo/features/auth/domain/entity/user_entity.dart';
@@ -10,11 +9,6 @@ class UserDataRepository implements UserDomainRepository {
   final UserAuth userAuth;
 
   UserDataRepository({required this.userAuth});
-
-  @override
-  Stream<UserEntity> getUser() {
-    throw UnimplementedError();
-  }
 
   @override
   Future<void> signOut() {

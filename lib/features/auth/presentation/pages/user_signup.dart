@@ -32,7 +32,7 @@ class _UserSignupState extends State<UserSignup> {
     return BlocListener<UserAuthBloc, UserAuthState>(
       listenWhen: (previous, current) => current is UserAuthActionState,
       listener: (context, state) async {
-        _logger.d('${state.runtimeType}');
+        //_logger.d('${state.runtimeType}');
 
         // After create account button clicked
         if (state is SignUpButtonClickLoadingState) {
