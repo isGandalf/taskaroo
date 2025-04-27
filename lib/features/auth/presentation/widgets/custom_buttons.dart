@@ -31,9 +31,10 @@ class CustomButtons extends StatelessWidget {
       height: 60,
       child: ElevatedButton(
         onPressed: () {
+          FocusScope.of(context).unfocus();
           if (formKey.currentState!.validate()) {
             if (isLogin) {
-              print('Login button - $isLogin');
+              //print('Login button - $isLogin');
               context.read<UserAuthBloc>().add(
                 SignInButtonPressedEvent(
                   email: email.text,
@@ -41,7 +42,7 @@ class CustomButtons extends StatelessWidget {
                 ),
               );
             } else {
-              print('Sign up button - $isLogin');
+              //print('Sign up button - $isLogin');
               context.read<UserAuthBloc>().add(
                 CreateAccountButtonPressedEvent(
                   firstName: firstName!.text,

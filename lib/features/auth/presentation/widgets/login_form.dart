@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:taskaroo/features/auth/presentation/pages/user_signup.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/custom_buttons.dart';
+import 'package:taskaroo/features/auth/presentation/widgets/forgot_pwd_text.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/rich_text_below_auth_page_button.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/text_fields.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/text_widgets.dart';
@@ -51,11 +52,13 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         children: [
           AuthPageHeading.mainHeading('Sign In.'),
-          const SizedBox(height: 100),
+          const SizedBox(height: 200),
           TextFields.textFeilds(widget.emailController, 'Email'),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           TextFields.textFeilds(widget.passwordController, 'Password', true),
-          const SizedBox(height: 30),
+          const SizedBox(height: 10),
+          ForgotPasswordText(),
+          const SizedBox(height: 10),
           CustomButtons(
             formKey: widget._formKey,
             text: 'Sign in',

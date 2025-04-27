@@ -35,3 +35,14 @@ final class UserAuthBlocError extends Errors {
     return getErrorMessage;
   }
 }
+
+final class ResetPasswordError extends Errors {
+  final String message;
+
+  ResetPasswordError({required this.message});
+
+  @override
+  String getError() {
+    return message;
+  }
+}

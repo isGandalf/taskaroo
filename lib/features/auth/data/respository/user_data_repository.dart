@@ -1,4 +1,5 @@
 import 'package:dart_either/src/dart_either.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:taskaroo/core/errors/firebase_errors.dart';
 import 'package:taskaroo/features/auth/data/model/user_model.dart';
 import 'package:taskaroo/features/auth/data/sources/user_auth.dart';
@@ -61,5 +62,15 @@ class UserDataRepository implements UserDomainRepository {
         return Right(userModel.toEntity());
       },
     );
+  }
+
+  @override
+  Future<Either<ResetPasswordError, void>> resetPassword(String email) async {
+    try {
+      await userAuth.resetPassword(email);
+      return Right(null);
+    } on FirebaseAuthException catch (e) {
+      return Left(ResetPasswordError(message: e.message.toString()));
+    }
   }
 }

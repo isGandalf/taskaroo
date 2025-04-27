@@ -25,4 +25,5 @@ abstract interface class UserDomainRepository {
     String password,
   );
   Future<void> signOut();
+  Future<Either<ResetPasswordError, void>> resetPassword(String email);
 }

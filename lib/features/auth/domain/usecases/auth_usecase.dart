@@ -32,4 +32,8 @@ class AuthUsecase {
   Future<void> signOut() {
     return userDomainRepository.signOut();
   }
+
+  Future<Either<ResetPasswordError, void>> resetPassword(String email) {
+    return userDomainRepository.resetPassword(email);
+  }
 }

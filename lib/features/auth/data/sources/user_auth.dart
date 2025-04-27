@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logger/logger.dart';
 import 'package:taskaroo/core/errors/firebase_errors.dart';
+import 'package:taskaroo/core/global/global.dart';
 import 'package:taskaroo/features/auth/data/model/user_model.dart';
 
 class UserAuth {
@@ -130,6 +131,19 @@ class UserAuth {
     } else {
       _logger.d('${currentUser.email} has been signed out');
       return Right(await firebaseAuth.signOut());
+    }
+  }
+
+  Future<Either<ResetPasswordError, void>> resetPassword(String email) async {
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+      logger.d('$email sent');
+      return Right(null);
+    } on FirebaseAuthException catch (e) {
+      logger.d('Failed to reset');
+      return Left(
+        ResetPasswordError(message: 'Failed to reset password: ${e.message}'),
+      );
     }
   }
 }

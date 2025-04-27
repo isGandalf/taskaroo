@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/web.dart';
-import 'package:taskaroo/features/auth/presentation/bloc/homepage/bloc/homepage_bloc.dart';
+import 'package:logger/logger.dart';
+//import 'package:logger/web.dart';
 import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/pages/homepage.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
@@ -27,7 +26,7 @@ class _UserLoginState extends State<UserLogin> {
     return BlocListener<UserAuthBloc, UserAuthState>(
       listenWhen: (previous, current) => current is UserAuthActionState,
       listener: (context, state) async {
-        //_logger.d('${state.runtimeType}');
+        _logger.d('${state.runtimeType}');
 
         // Upon Login Button click
         if (state is LogInButtonClickLoadingState) {
@@ -58,6 +57,39 @@ class _UserLoginState extends State<UserLogin> {
                   ),
             ),
             (route) => false,
+          );
+        } else if (state is ResetPasswordSuccessState) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(
+                  'An email with reset password link has been sent. Please check your inbox.',
+                ),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const UserLogin(),
+                        ),
+                      );
+                    },
+                    child: Text('Okay'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else if (state is ResetPasswordFailedState) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3));
+              return AlertDialog(title: Text(state.message));
+            },
           );
         }
       },

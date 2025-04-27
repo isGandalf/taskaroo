@@ -38,3 +38,12 @@ final class LoginSuccessState extends UserAuthActionState {
 final class SignOutSuccessState extends UserAuthState {}
 
 final class SignOutFailedState extends UserAuthState {}
+
+// R E S E T   P A S S W O R D
+final class ResetPasswordSuccessState extends UserAuthActionState {}
+
+final class ResetPasswordFailedState extends UserAuthActionState {
+  final String message;
+
+  ResetPasswordFailedState({required this.message});
+}

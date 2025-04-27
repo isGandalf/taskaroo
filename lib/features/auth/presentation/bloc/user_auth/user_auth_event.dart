@@ -34,3 +34,10 @@ final class SignInButtonPressedEvent extends UserAuthEvent {
 // Sign out event
 
 final class SignOutButtonPressedEvent extends UserAuthEvent {}
+
+// reset password
+final class ResetPasswordButtonPressedEvent extends UserAuthEvent {
+  final String email;
+
+  ResetPasswordButtonPressedEvent({required this.email});
+}

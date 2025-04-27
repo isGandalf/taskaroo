@@ -45,17 +45,22 @@ class CustomDrawer extends StatelessWidget {
           ),
 
           // Drawer body
-          ListTile(title: Text('My ToDos\''), onTap: () {}),
-          const SizedBox(height: 10),
-          ListTile(title: Text('Shared ToDos\''), onTap: () {}),
+          Expanded(
+            child: Center(
+              child: Text(
+                'Version 1.0.0',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ),
 
           // SignOut
-          Spacer(),
+          //Spacer(),
           Container(
             color: Colors.red.shade700,
             child: ListTile(
               title: Text('Sign Out', style: TextStyle(color: Colors.white)),
-              trailing: Icon(Icons.logout),
+              trailing: Icon(Icons.logout, color: Colors.white),
               onTap: () {
                 context.read<UserAuthBloc>().add(SignOutButtonPressedEvent());
               },
