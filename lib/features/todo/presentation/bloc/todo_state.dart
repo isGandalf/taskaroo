@@ -39,3 +39,8 @@ final class DeleteTodoSucessState extends TodoActionState {}
 
 // todo delete failed state
 final class DeleteTodoFailedState extends TodoActionState {}
+
+// cloud sync success state
+final class CloudSyncSuccessState extends TodoActionState {}
+
+final class CloudSyncFailedState extends TodoActionState {}

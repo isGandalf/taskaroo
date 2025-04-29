@@ -1,3 +1,4 @@
+import 'package:dart_either/dart_either.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaroo/core/global/global.dart';
@@ -55,6 +56,10 @@ class _TodoState extends State<Todo> {
             Colors.red.shade700,
           );
           //logger.d(state.runtimeType);
+        } else if (state is CloudSyncSuccessState) {
+          logger.d(state.runtimeType);
+        } else if (state is CloudSyncFailedState) {
+          logger.d(state.left());
         }
       },
       builder: (context, state) {

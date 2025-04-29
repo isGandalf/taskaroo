@@ -17,6 +17,8 @@ class TodoTile extends StatelessWidget {
         id: todoItem.id,
         userId: todoItem.userId,
         content: todoItem.content,
+        createdAt: todoItem.createdAt!,
+        updatedAt: DateTime.now(),
         isCompleted: todoItem.isCompleted,
       ),
     );
@@ -38,9 +40,7 @@ class TodoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final date = DateFormat.yMMMMEEEEd().format(
-      DateTime.fromMillisecondsSinceEpoch(todoItem.id),
-    );
+    final date = DateFormat.yMMMMEEEEd().add_jm().format(todoItem.createdAt);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
       child: ExpansionTile(

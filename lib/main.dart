@@ -64,7 +64,10 @@ void main() async {
   final isarDb = await Isar.open([ToDoModelSchema], directory: directory.path);
   logger.d('current user in main: $userId');
   // check current user for isar
-  final IsarLocalSource isarLocalSource = IsarLocalSource(db: isarDb);
+  final IsarLocalSource isarLocalSource = IsarLocalSource(
+    db: isarDb,
+    firebaseFirestore: firebaseFirestore,
+  );
 
   // initialize usecases
   final TodoDomainRepository todoDomainRepository = TodoDataRepository(

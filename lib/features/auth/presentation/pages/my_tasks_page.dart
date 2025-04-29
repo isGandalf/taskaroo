@@ -11,14 +11,14 @@ import 'package:taskaroo/features/todo/presentation/bloc/todo_bloc.dart';
 import 'package:taskaroo/features/todo/presentation/pages/todo.dart';
 import 'package:taskaroo/features/todo/presentation/widgets/add_alert_box.dart';
 
-class HomepageView extends StatefulWidget {
-  const HomepageView({super.key});
+class MyTasksPage extends StatefulWidget {
+  const MyTasksPage({super.key});
 
   @override
-  State<HomepageView> createState() => _HomepageViewState();
+  State<MyTasksPage> createState() => _HomepageViewState();
 }
 
-class _HomepageViewState extends State<HomepageView> {
+class _HomepageViewState extends State<MyTasksPage> {
   final currentUser = FirebaseAuth.instance.currentUser;
   final _todoController = TextEditingController();
   final _formKey = GlobalKey<FormState>();

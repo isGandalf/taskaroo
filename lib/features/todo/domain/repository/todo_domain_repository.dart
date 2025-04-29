@@ -31,4 +31,7 @@ abstract interface class TodoDomainRepository {
   Future<Either<ToDoIsarUpdateFailure, void>> toggleCompletionStatus(
     ToDoEntity todo,
   );
+
+  // cloud sync
+  Future<Either<TodoFirebaseSync, void>> cloudSync(ToDoEntity todo);
 }

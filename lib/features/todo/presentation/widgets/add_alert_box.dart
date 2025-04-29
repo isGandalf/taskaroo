@@ -24,6 +24,7 @@ class AddAlertBox extends StatelessWidget {
         AddNewToDoButtonPressedEvent(
           content: _todoController.text,
           userId: currentUser!.uid,
+          createdAt: DateTime.now(),
         ),
       );
       _todoController.text = '';

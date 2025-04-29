@@ -8,7 +8,7 @@ This class will handle all Todo local Isar db errors mainly:
 
 */
 
-abstract class TodoFailures {
+abstract interface class TodoFailures {
   String get message;
 }
 
@@ -45,4 +45,13 @@ final class TodoIsarDeleteFailure extends TodoFailures {
 
   @override
   String get message => 'Query failure: $error';
+}
+
+final class TodoFirebaseSync extends TodoFailures {
+  final String error;
+
+  TodoFirebaseSync({required this.error});
+
+  @override
+  String get message => 'Firebase Update failed $error';
 }

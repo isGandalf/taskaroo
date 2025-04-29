@@ -33,7 +33,7 @@ class TodoUsecases {
       final todoFromEntity = await todoDomainRepository.addToDo(newTodo);
       return todoFromEntity.fold(
         ifLeft: (failure) => Left(ToDoIsarWriteFailure(error: failure.error)),
-        ifRight: (model) => Right(model),
+        ifRight: (model) => Right(null),
       );
     } catch (e) {
       return Left(
@@ -88,6 +88,21 @@ class TodoUsecases {
     } catch (e) {
       return Left(
         ToDoIsarUpdateFailure(error: 'Unable to update todo status : $e'),
+      );
+    }
+  }
+
+  // cloud sync
+  Future<Either<TodoFirebaseSync, void>> cloudSync(ToDoEntity todo) async {
+    try {
+      final result = await todoDomainRepository.cloudSync(todo);
+      return result.fold(
+        ifLeft: (failure) => Left(TodoFirebaseSync(error: failure.error)),
+        ifRight: (_) => Right(null),
+      );
+    } catch (e) {
+      return Left(
+        TodoFirebaseSync(error: 'Unexpected error store firestore data: $e'),
       );
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:taskaroo/core/global/global.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/text_fields.dart';
 import 'package:taskaroo/features/todo/domain/entity/todo_entity.dart';
 import 'package:taskaroo/features/todo/presentation/bloc/todo_bloc.dart';
@@ -55,12 +56,14 @@ class EditButton extends StatelessWidget {
                       EditActionButton(
                         icon: Icons.check,
                         onTap: () {
+                          logger.d('From ui: ${todoItem.createdAt}');
                           context.read<TodoBloc>().add(
                             EditTodoButtonPressedEvent(
                               userId: todoItem.userId,
                               content: todoContent.text,
                               isCompleted: todoItem.isCompleted,
                               id: todoItem.id,
+                              createdAt: todoItem.createdAt,
                             ),
                           );
                           Navigator.of(context).pop();

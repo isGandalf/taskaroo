@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:dart_either/dart_either.dart';
 
 import 'package:meta/meta.dart';
+import 'package:taskaroo/core/errors/todo_errors.dart';
 
 import 'package:taskaroo/core/global/global.dart';
 import 'package:taskaroo/features/todo/domain/entity/todo_entity.dart';
@@ -48,18 +50,25 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       content: event.content,
       userId: event.userId,
       isCompleted: false,
+      createdAt: event.createdAt,
     );
 
     final newTodoAdded = await todoUsecases.addTodo(newTodo);
     final todoList = await todoUsecases.fetchToDos();
+    final syncToCloud = await todoUsecases.cloudSync(newTodo);
 
     return newTodoAdded.fold(
       ifLeft: (failure) async {
+        logger.d(state);
         emit(AddTodoFailedState());
       },
 
       ifRight: (_) async {
         emit(AddTodoSucessState());
+        syncToCloud.fold(
+          ifLeft: (failure) => emit(CloudSyncSuccessState()),
+          ifRight: (_) => emit(CloudSyncSuccessState()),
+        );
         todoList.fold(
           ifLeft: (_) => emit(LoadTodoListFailedState()),
           ifRight: (list) => emit(LoadTodoListState(todoList: list)),
@@ -78,6 +87,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       content: event.content,
       userId: event.userId,
       isCompleted: event.isCompleted,
+      createdAt: event.createdAt,
+      updatedAt: event.updatedAt,
     );
     final todoUpdated = await todoUsecases.toggleCompletion(getTodo);
     final todoList = await todoUsecases.fetchToDos();
@@ -122,10 +133,11 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       id: event.id,
       content: event.content,
       userId: event.userId,
-      isCompleted: event.isCompleted,
+      isCompleted: false,
+      createdAt: event.createdAt,
     );
 
-    final newTodoAdded = await todoUsecases.addTodo(newTodo);
+    final newTodoAdded = await todoUsecases.updateTodo(newTodo);
     final todoList = await todoUsecases.fetchToDos();
 
     return newTodoAdded.fold(

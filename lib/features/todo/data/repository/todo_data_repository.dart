@@ -83,4 +83,26 @@ class TodoDataRepository implements TodoDomainRepository {
       );
     }
   }
+
+  @override
+  Future<Either<TodoFirebaseSync, void>> cloudSync(ToDoEntity todo) async {
+    try {
+      final result = await isarLocalSource.cloudSync(todo);
+      return result.fold(
+        ifLeft:
+            (failure) => Left(
+              TodoFirebaseSync(
+                error: 'Firestore saving failure ${failure.error}',
+              ),
+            ),
+        ifRight: (_) => Right(null),
+      );
+    } catch (e) {
+      return Left(
+        TodoFirebaseSync(
+          error: 'Unexpected error storing data in firestore $e',
+        ),
+      );
+    }
+  }
 }

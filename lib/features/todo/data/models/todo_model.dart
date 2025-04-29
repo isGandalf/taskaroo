@@ -21,6 +21,8 @@ class ToDoModel {
   Id id = Isar.autoIncrement;
   late String content;
   late String userId;
+  late DateTime createdAt;
+  DateTime? updatedAt;
   late bool isCompleted;
 
   // dart object to Isar object (from domain). This is need when we add and update. User sends ToDo entity to isar source.
@@ -29,6 +31,8 @@ class ToDoModel {
     model.id = todo.id;
     model.content = todo.content;
     model.userId = todo.userId;
+    model.updatedAt = todo.updatedAt;
+    model.createdAt = todo.createdAt;
     model.isCompleted = todo.isCompleted;
     return model;
   }
@@ -40,6 +44,8 @@ class ToDoModel {
       content: content,
       isCompleted: isCompleted,
       userId: userId,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     );
   }
 }
