@@ -24,6 +24,7 @@ class ToDoModel {
   late DateTime createdAt;
   DateTime? updatedAt;
   late bool isCompleted;
+  late bool isSynced;
 
   // dart object to Isar object (from domain). This is need when we add and update. User sends ToDo entity to isar source.
   static ToDoModel fromModelToIsar(ToDoEntity todo) {
@@ -34,6 +35,7 @@ class ToDoModel {
     model.updatedAt = todo.updatedAt;
     model.createdAt = todo.createdAt;
     model.isCompleted = todo.isCompleted;
+    model.isSynced = todo.isSynced;
     return model;
   }
 
@@ -46,6 +48,7 @@ class ToDoModel {
       userId: userId,
       createdAt: createdAt,
       updatedAt: updatedAt,
+      isSynced: isSynced,
     );
   }
 }

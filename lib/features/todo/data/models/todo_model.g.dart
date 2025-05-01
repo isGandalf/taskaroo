@@ -32,13 +32,18 @@ const ToDoModelSchema = CollectionSchema(
       name: r'isCompleted',
       type: IsarType.bool,
     ),
-    r'updatedAt': PropertySchema(
+    r'isSynced': PropertySchema(
       id: 3,
+      name: r'isSynced',
+      type: IsarType.bool,
+    ),
+    r'updatedAt': PropertySchema(
+      id: 4,
       name: r'updatedAt',
       type: IsarType.dateTime,
     ),
     r'userId': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'userId',
       type: IsarType.string,
     )
@@ -77,8 +82,9 @@ void _toDoModelSerialize(
   writer.writeString(offsets[0], object.content);
   writer.writeDateTime(offsets[1], object.createdAt);
   writer.writeBool(offsets[2], object.isCompleted);
-  writer.writeDateTime(offsets[3], object.updatedAt);
-  writer.writeString(offsets[4], object.userId);
+  writer.writeBool(offsets[3], object.isSynced);
+  writer.writeDateTime(offsets[4], object.updatedAt);
+  writer.writeString(offsets[5], object.userId);
 }
 
 ToDoModel _toDoModelDeserialize(
@@ -92,8 +98,9 @@ ToDoModel _toDoModelDeserialize(
   object.createdAt = reader.readDateTime(offsets[1]);
   object.id = id;
   object.isCompleted = reader.readBool(offsets[2]);
-  object.updatedAt = reader.readDateTimeOrNull(offsets[3]);
-  object.userId = reader.readString(offsets[4]);
+  object.isSynced = reader.readBool(offsets[3]);
+  object.updatedAt = reader.readDateTimeOrNull(offsets[4]);
+  object.userId = reader.readString(offsets[5]);
   return object;
 }
 
@@ -111,8 +118,10 @@ P _toDoModelDeserializeProp<P>(
     case 2:
       return (reader.readBool(offset)) as P;
     case 3:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 4:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 5:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -458,6 +467,16 @@ extension ToDoModelQueryFilter
     });
   }
 
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> isSyncedEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isSynced',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> updatedAtIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -703,6 +722,18 @@ extension ToDoModelQuerySortBy on QueryBuilder<ToDoModel, ToDoModel, QSortBy> {
     });
   }
 
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> sortByIsSynced() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSynced', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> sortByIsSyncedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSynced', Sort.desc);
+    });
+  }
+
   QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> sortByUpdatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'updatedAt', Sort.asc);
@@ -778,6 +809,18 @@ extension ToDoModelQuerySortThenBy
     });
   }
 
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> thenByIsSynced() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSynced', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> thenByIsSyncedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isSynced', Sort.desc);
+    });
+  }
+
   QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> thenByUpdatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'updatedAt', Sort.asc);
@@ -824,6 +867,12 @@ extension ToDoModelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<ToDoModel, ToDoModel, QDistinct> distinctByIsSynced() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isSynced');
+    });
+  }
+
   QueryBuilder<ToDoModel, ToDoModel, QDistinct> distinctByUpdatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'updatedAt');
@@ -861,6 +910,12 @@ extension ToDoModelQueryProperty
   QueryBuilder<ToDoModel, bool, QQueryOperations> isCompletedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isCompleted');
+    });
+  }
+
+  QueryBuilder<ToDoModel, bool, QQueryOperations> isSyncedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isSynced');
     });
   }
 

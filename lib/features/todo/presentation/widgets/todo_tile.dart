@@ -17,7 +17,7 @@ class TodoTile extends StatelessWidget {
         id: todoItem.id,
         userId: todoItem.userId,
         content: todoItem.content,
-        createdAt: todoItem.createdAt!,
+        createdAt: todoItem.createdAt,
         updatedAt: DateTime.now(),
         isCompleted: todoItem.isCompleted,
       ),

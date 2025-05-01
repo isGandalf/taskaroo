@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/signup_form.dart';
-import 'package:taskaroo/features/auth/presentation/widgets/theme_switch.dart';
 import 'package:taskaroo/features/auth/presentation/pages/user_login.dart';
+import 'package:taskaroo/features/auth/presentation/widgets/toggle_theme_switch.dart';
 
 class UserSignup extends StatefulWidget {
   const UserSignup({super.key});
@@ -75,7 +75,12 @@ class _UserSignupState extends State<UserSignup> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          appBar: AppBar(toolbarHeight: 68, actions: [ThemeSwitch()]),
+          appBar: AppBar(
+            toolbarHeight: 68,
+            actions: [
+              Row(children: [ToggleThemeSwitch()]),
+            ],
+          ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: SingleChildScrollView(

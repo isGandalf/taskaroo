@@ -1,26 +1,12 @@
-import 'package:dart_either/dart_either.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaroo/core/global/global.dart';
-
 import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
-
 import 'package:taskaroo/features/todo/presentation/bloc/todo_bloc.dart';
 import 'package:taskaroo/features/todo/presentation/widgets/todo_list_view.dart';
 
-class Todo extends StatefulWidget {
+class Todo extends StatelessWidget {
   const Todo({super.key});
-
-  @override
-  State<Todo> createState() => _TodoState();
-}
-
-class _TodoState extends State<Todo> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<TodoBloc>().add(FetchTodoListEvent());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,49 +16,57 @@ class _TodoState extends State<Todo> {
       listener: (context, state) {
         logger.d('listner: ${state.runtimeType}');
         if (state is AddTodoSucessState) {
-          showCustomSnackbar(context, 'Todo added', Colors.green.shade700);
+          showCustomSnackbar(context, 'Task added', Colors.green.shade700);
           //logger.d(state.runtimeType);
         } else if (state is AddTodoFailedState) {
           showCustomSnackbar(
             context,
-            'Failed to add todo',
+            'Failed to add task',
             Colors.red.shade700,
           );
           //logger.d(state.runtimeType);
-        } else if (state is UpdateTodoSucessState) {
+        } else if (state is SyncingState) {
         } else if (state is UpdateTodoFailedState) {
           showCustomSnackbar(
             context,
-            'Failed to update todo',
+            'Failed to update task',
             Colors.red.shade700,
           );
           //logger.d(state.runtimeType);
         } else if (state is DeleteTodoSucessState) {
-          showCustomSnackbar(context, 'Todo deleted', Colors.red.shade700);
+          showCustomSnackbar(context, 'task deleted', Colors.red.shade700);
         } else if (state is DeleteTodoFailedState) {
           showCustomSnackbar(
             context,
-            'Failed to delete todo',
+            'Failed to delete task',
             Colors.red.shade700,
           );
           //logger.d(state.runtimeType);
-        } else if (state is CloudSyncSuccessState) {
-          logger.d(state.runtimeType);
-        } else if (state is CloudSyncFailedState) {
-          logger.d(state.left());
         }
       },
       builder: (context, state) {
         logger.d('Builder: ${state.runtimeType}');
-        if (state is LoadTodoListState) {
+        if (state is SyncingState) {
+          return const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 10),
+                Text('Syncing...'),
+              ],
+            ),
+          );
+        } else if (state is LoadTodoListSuccessState) {
           final todos = state.todoList;
+          //print(' load todo state -------- ${todos.first.content}');
           if (todos.isEmpty) {
-            //logger.d('Todo list is empty');
-            return const Center(child: Text('No todos yet'));
+            logger.d('Todo list is empty');
+            return const Center(child: Text('No tasks yet'));
           }
           return TodoListView(todos: todos);
         } else if (state is LoadTodoListFailedState) {
-          return const Center(child: Text('Unable to fetch any todos'));
+          return const Center(child: Text('Unable to fetch any task'));
         }
         //logger.d('Unexpected error ${state.runtimeType}');
         return const Center(child: CircularProgressIndicator.adaptive());

@@ -66,7 +66,7 @@ class _SignupFormState extends State<SignupForm> {
           const SizedBox(height: 30),
           CustomButtons(
             formKey: widget._formKey,
-            text: 'Creat Account',
+            text: 'Create Account',
             firstName: widget.firstNameController,
             lastName: widget.lastNameController,
             email: widget.emailController,

@@ -9,13 +9,25 @@ final class TodoInitial extends TodoState {}
 // this class will be used for any action performed on the UI that effects the todolist
 final class TodoActionState extends TodoState {}
 
-// S T A N D A R D    S T A T E S
+// S T A N D A R D    S T A T E S - standard todo state which will be called
+// after every action taken on the todo list
+final class PushLocalTodosToCloudSuccessState extends TodoState {}
 
-// standard todo state which will be called after every action taken on the todo list
-final class LoadTodoListState extends TodoState {
+final class PushLocalTodosToCloudFailedState extends TodoState {}
+
+final class SyncingState extends TodoState {}
+
+// fetch todos from cloud success state
+final class LoadTodoListFromCloudSuccessState extends TodoState {}
+
+// fetch todos from cloud success state
+final class LoadTodoListFromCloudFailedState extends TodoState {}
+
+// fetch from local
+final class LoadTodoListSuccessState extends TodoState {
   final List<ToDoEntity> todoList;
 
-  LoadTodoListState({required this.todoList});
+  LoadTodoListSuccessState({required this.todoList});
 }
 
 // fetch failed state
@@ -39,8 +51,3 @@ final class DeleteTodoSucessState extends TodoActionState {}
 
 // todo delete failed state
 final class DeleteTodoFailedState extends TodoActionState {}
-
-// cloud sync success state
-final class CloudSyncSuccessState extends TodoActionState {}
-
-final class CloudSyncFailedState extends TodoActionState {}

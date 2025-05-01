@@ -15,8 +15,9 @@ class ToDoEntity {
   final String content;
   final String userId;
   final DateTime createdAt;
-  DateTime? updatedAt;
+  final DateTime? updatedAt;
   final bool isCompleted;
+  final bool isSynced;
 
   ToDoEntity({
     required this.id,
@@ -25,16 +26,23 @@ class ToDoEntity {
     required this.createdAt,
     this.updatedAt,
     this.isCompleted = false,
+    this.isSynced = false,
   });
 
-  ToDoEntity toggleStatus() {
+  ToDoEntity copyWith({
+    String? content,
+    DateTime? updatedAt,
+    bool? isCompleted,
+    bool? isSynced,
+  }) {
     return ToDoEntity(
       id: id,
-      content: content,
-      isCompleted: !isCompleted,
+      content: content ?? this.content,
       userId: userId,
       createdAt: createdAt,
-      updatedAt: updatedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isCompleted: isCompleted ?? this.isCompleted,
+      isSynced: isSynced ?? this.isSynced,
     );
   }
 }

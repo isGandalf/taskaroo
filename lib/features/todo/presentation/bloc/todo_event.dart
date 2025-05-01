@@ -3,7 +3,13 @@ part of 'todo_bloc.dart';
 @immutable
 sealed class TodoEvent {}
 
-// this event will be triggered to fetch all todos
+// this event will be triggered on each app run to upload all data from local to cloud
+final class PushLocalTodosToCloudEvent extends TodoEvent {}
+
+// this event will be triggered to download cloud data to local
+final class FetchTodosFromCloudEvent extends TodoEvent {}
+
+// this event will be triggered to fetch all todos from local
 final class FetchTodoListEvent extends TodoEvent {}
 
 // event triggered when add todo button is pressed

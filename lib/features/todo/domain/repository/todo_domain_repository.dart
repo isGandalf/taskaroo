@@ -15,6 +15,12 @@ import 'package:taskaroo/core/errors/todo_errors.dart';
 import 'package:taskaroo/features/todo/domain/entity/todo_entity.dart';
 
 abstract interface class TodoDomainRepository {
+  // push local todos to cloud
+  Future<Either<TodoFirebaseSync, void>> pushLocalTodosToCloud();
+
+  // fetch todos from cloud
+  Future<Either<TodoFirebaseSync, void>> fetchTodosFromCloud();
+
   // Fetch
   Future<Either<ToDoIsarFetchFailure, List<ToDoEntity>>> fetchToDos();
 
@@ -33,5 +39,5 @@ abstract interface class TodoDomainRepository {
   );
 
   // cloud sync
-  Future<Either<TodoFirebaseSync, void>> cloudSync(ToDoEntity todo);
+  // Future<Either<TodoFirebaseSync, void>> cloudUpdate(ToDoEntity todo);
 }

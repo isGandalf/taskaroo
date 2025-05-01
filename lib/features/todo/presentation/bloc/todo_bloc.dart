@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:dart_either/dart_either.dart';
-
 import 'package:meta/meta.dart';
-import 'package:taskaroo/core/errors/todo_errors.dart';
 
 import 'package:taskaroo/core/global/global.dart';
 import 'package:taskaroo/features/todo/domain/entity/todo_entity.dart';
@@ -16,11 +13,57 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   final TodoUsecases todoUsecases;
 
   TodoBloc(this.todoUsecases) : super(TodoInitial()) {
+    on<PushLocalTodosToCloudEvent>(pushLocalTodosToCloud);
+    on<FetchTodosFromCloudEvent>(fetchTodosFromCloudEvent);
     on<FetchTodoListEvent>(fetchTodoListEvent);
     on<AddNewToDoButtonPressedEvent>(addNewToDoButtonPressedEvent);
     on<ToggleTodoEvent>(toggleTodoEvent);
     on<DeleteTodoButtonPressedEvent>(deleteTodoButtonPressedEvent);
     on<EditTodoButtonPressedEvent>(editTodoButtonPressedEvent);
+  }
+
+  // push local data to cloud
+  FutureOr<void> pushLocalTodosToCloud(
+    PushLocalTodosToCloudEvent event,
+    Emitter<TodoState> emit,
+  ) async {
+    emit(SyncingState());
+    // syncing state
+    try {
+      await todoUsecases.pushLocalTodosToCloud();
+
+      // fetch from cloud
+      await todoUsecases.fetchTodoFromCloud();
+
+      // save to local
+      final todolist = await todoUsecases.fetchToDos();
+      return todolist.fold(
+        ifLeft: (failure) => emit(LoadTodoListFailedState()),
+        ifRight: (list) => emit(LoadTodoListSuccessState(todoList: list)),
+      );
+    } on Exception catch (e) {
+      logger.e('Error during sync: $e');
+      emit(LoadTodoListFailedState());
+    }
+  }
+
+  // save cloud data to local
+  FutureOr<void> fetchTodosFromCloudEvent(
+    FetchTodosFromCloudEvent event,
+    Emitter<TodoState> emit,
+  ) async {
+    logger.d('Fetching data from cloud...');
+    final todoList = await todoUsecases.fetchTodoFromCloud();
+    return todoList.fold(
+      ifLeft: (failure) {
+        logger.e('In bloc: ${failure.error}');
+        emit(LoadTodoListFromCloudFailedState());
+      },
+      ifRight: (todoList) {
+        logger.d('Bloc: Fetch success from cloud');
+        emit(LoadTodoListFromCloudSuccessState());
+      },
+    );
   }
 
   FutureOr<void> fetchTodoListEvent(
@@ -31,12 +74,12 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
     return todoList.fold(
       ifLeft: (failure) {
-        logger.d('Fetch failed');
+        logger.d('Fetch bloc operation failed');
         emit(LoadTodoListFailedState());
       },
       ifRight: (list) {
-        logger.d('Fetch success');
-        emit(LoadTodoListState(todoList: list));
+        logger.d('Fetch bloc operation success');
+        emit(LoadTodoListSuccessState(todoList: list));
       },
     );
   }
@@ -49,13 +92,12 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       id: DateTime.now().millisecondsSinceEpoch,
       content: event.content,
       userId: event.userId,
-      isCompleted: false,
       createdAt: event.createdAt,
     );
 
     final newTodoAdded = await todoUsecases.addTodo(newTodo);
     final todoList = await todoUsecases.fetchToDos();
-    final syncToCloud = await todoUsecases.cloudSync(newTodo);
+    // final syncToCloud = await todoUsecases.cloudSync(newTodo);
 
     return newTodoAdded.fold(
       ifLeft: (failure) async {
@@ -65,13 +107,9 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
       ifRight: (_) async {
         emit(AddTodoSucessState());
-        syncToCloud.fold(
-          ifLeft: (failure) => emit(CloudSyncSuccessState()),
-          ifRight: (_) => emit(CloudSyncSuccessState()),
-        );
         todoList.fold(
           ifLeft: (_) => emit(LoadTodoListFailedState()),
-          ifRight: (list) => emit(LoadTodoListState(todoList: list)),
+          ifRight: (list) => emit(LoadTodoListSuccessState(todoList: list)),
         );
       },
     );
@@ -99,7 +137,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         emit(UpdateTodoSucessState());
         todoList.fold(
           ifLeft: (_) => emit(LoadTodoListFailedState()),
-          ifRight: (list) => emit(LoadTodoListState(todoList: list)),
+          ifRight: (list) => emit(LoadTodoListSuccessState(todoList: list)),
         );
       },
     );
@@ -119,7 +157,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         emit(DeleteTodoSucessState());
         todoList.fold(
           ifLeft: (failure) => emit(LoadTodoListFailedState()),
-          ifRight: (list) => emit(LoadTodoListState(todoList: list)),
+          ifRight: (list) => emit(LoadTodoListSuccessState(todoList: list)),
         );
       },
     );
@@ -149,7 +187,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         emit(UpdateTodoSucessState());
         todoList.fold(
           ifLeft: (_) => emit(LoadTodoListFailedState()),
-          ifRight: (list) => emit(LoadTodoListState(todoList: list)),
+          ifRight: (list) => emit(LoadTodoListSuccessState(todoList: list)),
         );
       },
     );

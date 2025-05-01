@@ -6,7 +6,7 @@ import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_blo
 import 'package:taskaroo/features/auth/presentation/pages/homepage.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/login_form.dart';
-import 'package:taskaroo/features/auth/presentation/widgets/theme_switch.dart';
+import 'package:taskaroo/features/auth/presentation/widgets/toggle_theme_switch.dart';
 
 class UserLogin extends StatefulWidget {
   const UserLogin({super.key});
@@ -22,11 +22,23 @@ class _UserLoginState extends State<UserLogin> {
   final _logger = Logger();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<UserAuthBloc, UserAuthState>(
       listenWhen: (previous, current) => current is UserAuthActionState,
       listener: (context, state) async {
-        _logger.d('${state.runtimeType}');
+        _logger.d('User login --- ${state.runtimeType}');
 
         // Upon Login Button click
         if (state is LogInButtonClickLoadingState) {
@@ -96,7 +108,12 @@ class _UserLoginState extends State<UserLogin> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          appBar: AppBar(toolbarHeight: 68, actions: [ThemeSwitch()]),
+          appBar: AppBar(
+            toolbarHeight: 68,
+            actions: [
+              Row(children: [ToggleThemeSwitch()]),
+            ],
+          ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: SingleChildScrollView(

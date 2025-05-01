@@ -6,7 +6,8 @@ import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_blo
 import 'package:taskaroo/features/auth/presentation/pages/user_login.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/custom_drawer.dart';
-import 'package:taskaroo/features/auth/presentation/widgets/theme_switch.dart';
+import 'package:taskaroo/features/auth/presentation/widgets/sync_button.dart';
+import 'package:taskaroo/features/auth/presentation/widgets/toggle_theme_switch.dart';
 import 'package:taskaroo/features/todo/presentation/bloc/todo_bloc.dart';
 import 'package:taskaroo/features/todo/presentation/pages/todo.dart';
 import 'package:taskaroo/features/todo/presentation/widgets/add_alert_box.dart';
@@ -18,10 +19,36 @@ class MyTasksPage extends StatefulWidget {
   State<MyTasksPage> createState() => _HomepageViewState();
 }
 
-class _HomepageViewState extends State<MyTasksPage> {
+class _HomepageViewState extends State<MyTasksPage>
+    with WidgetsBindingObserver {
   final currentUser = FirebaseAuth.instance.currentUser;
   final _todoController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _syncWithCloud();
+  }
+
+  @override
+  void dispose() {
+    _todoController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _syncWithCloud();
+    }
+  }
+
+  void _syncWithCloud() {
+    context.read<TodoBloc>().add(PushLocalTodosToCloudEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +79,12 @@ class _HomepageViewState extends State<MyTasksPage> {
         BlocListener<TodoBloc, TodoState>(listener: (context, state) {}),
       ],
       child: Scaffold(
-        appBar: AppBar(toolbarHeight: 68, actions: [ThemeSwitch()]),
+        appBar: AppBar(
+          toolbarHeight: 68,
+          actions: [
+            Row(children: [SyncButton(), ToggleThemeSwitch()]),
+          ],
+        ),
         drawer: BlocBuilder<HomepageBloc, HomepageState>(
           builder: (context, state) {
             //logger.d('${state.runtimeType}');

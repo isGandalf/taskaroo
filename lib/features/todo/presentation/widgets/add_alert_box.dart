@@ -35,11 +35,11 @@ class AddAlertBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: TextFields.textFeilds(_todoController, 'Todo'),
+      content: TextFields.textFeilds(_todoController, 'Task'),
       actionsPadding: EdgeInsets.zero,
       title: Center(
         child: Text(
-          'Add a todo',
+          'Add a task',
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
         ),
       ),
