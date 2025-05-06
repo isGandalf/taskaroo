@@ -1,3 +1,11 @@
+/*
+
+This class will define the contracts set in domain layer. In this case, actual operations needed
+for the app to run its core logic is implemented. This class will primarily focus on 'my Tasks' page
+where it will fetch data from cloud and local, push data to cloud and perform CRUD operations.
+
+*/
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 // ignore: implementation_imports
 import 'package:dart_either/src/dart_either.dart';

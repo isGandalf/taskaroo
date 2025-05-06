@@ -1,3 +1,11 @@
+/*
+
+This class defines application's operations. Each use case represent specific action or
+feature related tasks. In this case, this will handle user authentication use cases such as
+create new user, user login, signout and reset password.
+
+*/
+
 import 'package:dart_either/dart_either.dart';
 import 'package:taskaroo/core/errors/firebase_errors.dart';
 import 'package:taskaroo/features/auth/domain/entity/user_entity.dart';

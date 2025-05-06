@@ -1,3 +1,9 @@
+/*
+
+This class interacts with Bloc/UI to perform the CRUD actions on the Isar db and update UI of the 'Shared tasks' page.
+
+*/
+
 import 'package:dart_either/dart_either.dart';
 import 'package:taskaroo/core/errors/todo_errors.dart';
 import 'package:taskaroo/features/todo/domain/entity/todo_entity.dart';

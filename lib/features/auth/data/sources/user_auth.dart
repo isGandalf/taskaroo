@@ -1,3 +1,11 @@
+/*
+
+This class contains concrete implementations for accessing data from cloud. In this case, this class
+will communicate with Firebase to register a new user or login existing user. This class directly
+interacts with Firebase and return the data to data repository.
+
+*/
+
 import 'package:dart_either/dart_either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

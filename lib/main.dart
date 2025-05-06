@@ -30,6 +30,15 @@ import 'package:taskaroo/features/todo/presentation/bloc/my_todo_bloc/todo_bloc.
 import 'package:taskaroo/features/todo/presentation/bloc/shared_todo_bloc/shared_todo_bloc.dart';
 import 'package:taskaroo/firebase_options.dart';
 
+/* 
+ * The main method will initialize the required packages and frameworks needed for the app to run.
+ * Initialize:
+ * 1. Firebase   - for user authentication and registration.
+ * 2. Firestore  - for saving user details and todo details.
+ * 3. Isar       - for storing data in local storage.
+ * 4. Clean architecture dependencies.
+*/
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -115,20 +124,9 @@ class Taskaroo extends StatelessWidget {
       theme: context.watch<ThemeProvider>().getCurrentTheme,
 
       /*
-      For login page - We need two async operation (1) Stream for listening to user login status (2) Future for
-      getting user data from firestore if user is logged it.
-    
-      Steps:
-        1. Check if user has already logged in. This is done by Streambuilder and listens to Firebase stream.
-         -- FirebaseAuth.instance.authStateChanges()
-        2. Manage the snapshot connection states for firebase.
-        3. When condition meets snapshot has data, get user data from firestore and map it with user entity. Here,
-        we need FutureBuilder<DocumentSnapshot>(). This needs a future
-         -- FirebaseFirestore.instance.collection('') ... .doc(user id) ... get()
-        4. Manage the snapshot connection states for firestore operation. Load the UI based on data received.
-        5. If data failed to receive from particular user, throw 'No data found' page.
-        6. If data revived Map the data with usermodel.
-        
+
+      * For login page, check if the user is already logged in using FutureBuilder. If yes, the get current user data from
+      * cloud and build the homepage UI. Ensure to map the snapshot data to entity which will be used in the UI.
     
       */
       home:

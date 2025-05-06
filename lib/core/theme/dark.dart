@@ -1,3 +1,9 @@
+/*
+
+* Setting up default properties of the Dark material theme.
+
+*/
+
 import 'package:flutter/material.dart';
 
 OutlineInputBorder border = OutlineInputBorder(

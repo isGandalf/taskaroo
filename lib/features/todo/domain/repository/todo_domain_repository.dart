@@ -3,10 +3,15 @@
 This repository will act as a contract to ensure implementation of the functions. The actual implementation will
 be handled by data layer. Below are main functions to be implemented
 
-1. Fetch todos
+1. Fetch todos from local
 2. add todos
 3. update todos
 4. delete todos
+5. toggle completion status of the todo
+6. push local todos to cloud
+7. fetch todos from cloud and save to local.
+
+This will control all the todos in 'My tasks' page.
 
 */
 

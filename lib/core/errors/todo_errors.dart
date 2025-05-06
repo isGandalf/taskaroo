@@ -1,10 +1,10 @@
 /*
 
-This class will handle all Todo local Isar db errors mainly:
-1. write - when local db is corrupt or app crashed while writing
-2. read - db read failures like reading a null result or no db
-3. model errors - if isar model isn't correctly defined like field type mismatch
-4. delete failures - when deleting non existed item from db
+* This class will handle all Todo local Isar db errors mainly:
+* 1. write - when local db is corrupt or app crashed while writing
+* 2. read - db read failures like reading a null result or no db
+* 3. model errors - if isar model isn't correctly defined like field type mismatch
+* 4. delete failures - when deleting non existed item from db
 
 */
 

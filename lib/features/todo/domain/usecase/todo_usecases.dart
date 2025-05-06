@@ -1,6 +1,6 @@
 /*
 
-This class interacts with Bloc/UI to perform the CRUD actions on the Isar db and update UI
+This class interacts with Bloc/UI to perform the CRUD actions on the Isar db and update UI of the 'My tasks' page.
 
 */
 

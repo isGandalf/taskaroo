@@ -1,3 +1,12 @@
+/*
+
+This class will define the contracts set in domain layer. In this case, actual operations needed
+for the app to run its core logic is implemented. This class will primarily focus on 'Shared Tasks' page
+where it will fetch data from cloud and local, push data to cloud and perform only update operations
+(change completion status of the task and update the task content).
+
+*/
+
 // ignore: implementation_imports
 import 'package:dart_either/src/dart_either.dart';
 import 'package:taskaroo/core/errors/todo_errors.dart';

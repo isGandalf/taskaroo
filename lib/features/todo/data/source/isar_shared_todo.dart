@@ -1,3 +1,12 @@
+/*
+
+This class will interact with ISAR db and perform CRUD operations. Along with that, push local data to cloud
+and fetch updated data and save to local. The application's business logic will primarily work with local 
+data. This class with manage the 'Shared tasks' page.
+
+
+*/
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_either/dart_either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -196,6 +205,7 @@ class IsarSharedTodo {
     }
   }
 
+  // share Todo
   Future<Either<ToDoIsarUpdateFailure, void>> shareTodo(
     int id,
     String email,
@@ -223,6 +233,7 @@ class IsarSharedTodo {
     }
   }
 
+  // update completion status of the shared Todo
   Future<Either<ToDoIsarUpdateFailure, void>> toggleSharedTodo(int id) async {
     try {
       final todoFromIsar = await db.toDoModels.get(id);

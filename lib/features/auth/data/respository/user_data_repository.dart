@@ -1,3 +1,11 @@
+/*
+
+* To separate the concern of implementing the contracts stated in domain layer, this layer defines how
+* the contracts are implemented. This is where the implementation works with different frameworks and make 
+* sense of the data received with the contracts.
+
+*/
+
 // ignore: implementation_imports
 import 'package:dart_either/src/dart_either.dart';
 import 'package:firebase_auth/firebase_auth.dart';

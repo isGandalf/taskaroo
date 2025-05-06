@@ -1,3 +1,10 @@
+/*
+
+* For maintaining separation of concern between data layer and domain layer, this class will replicate
+* entity class from domain layer. This class will interact with cloud and manage the data. 
+
+*/
+
 import 'package:taskaroo/features/auth/domain/entity/user_entity.dart';
 
 class UserModel {

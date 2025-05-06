@@ -1,3 +1,9 @@
+/*
+
+* Provider to manage the theme state of the app
+
+*/
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskaroo/core/global/global.dart';

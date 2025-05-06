@@ -1,15 +1,8 @@
 /*
 
-This class will interact with ISAR db and perform 4 operations
-1. Fetch todos
-  a) Here, upon user login and app start, cloud fetch will trigger for once and save the data in
-     local db.
-2. add todo
-  a) Once added, it will save the data in local db as well as cloud. But cloud fetch will not 
-     trigger since data in cloud, as well as local are identical.
-3. update todo
-  a) Similar to add todo.
-4. delete todo
+This class will interact with ISAR db and perform CRUD operations. Along with that, push local data to cloud
+and fetch updated data and save to local. The application's business logic will primarily work with local 
+data. This class with manage the 'My tasks' page.
 
 
 */
@@ -42,6 +35,7 @@ class IsarLocalSource {
     b) Read - fetch data from local db (recurring)
     c) Update - update (including toggle function) an existing todo to local db and cloud
     d) Delete - delete an existing todo from local and cloud
+  5. Push the local data to cloud
   */
 
   // P U S H     L O C A L     D A T A     T O     C L O U D (where isSynced are false)

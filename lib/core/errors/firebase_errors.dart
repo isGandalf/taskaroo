@@ -1,3 +1,7 @@
+/*
+* Custom class to handle errors related to Firebase
+*/
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class Errors {

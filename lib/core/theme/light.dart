@@ -1,3 +1,9 @@
+/*
+
+* Setting up default properties of the Light material theme.
+
+*/
+
 import 'package:flutter/material.dart';
 
 OutlineInputBorder border = OutlineInputBorder(
