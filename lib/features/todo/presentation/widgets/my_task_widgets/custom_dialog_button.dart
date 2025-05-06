@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class DeleteActionButton extends StatelessWidget {
+class CustomDialogButton extends StatelessWidget {
   final VoidCallback onTap;
   final Color backgroundColor;
   final String labelText;
   final BorderRadius radius;
 
-  const DeleteActionButton({
+  const CustomDialogButton({
     super.key,
     required this.onTap,
     required this.backgroundColor,

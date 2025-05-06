@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/bloc/homepage/bloc/homepage_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/bloc/user_auth/user_auth_bloc.dart';
+import 'package:taskaroo/features/auth/presentation/pages/user_login.dart';
+import 'package:taskaroo/features/auth/presentation/widgets/confirmation_dialog.dart';
 
 class CustomDrawer extends StatelessWidget {
   final LoadHomepageDataState state;
@@ -62,7 +64,25 @@ class CustomDrawer extends StatelessWidget {
               title: Text('Sign Out', style: TextStyle(color: Colors.white)),
               trailing: Icon(Icons.logout, color: Colors.white),
               onTap: () {
-                context.read<UserAuthBloc>().add(SignOutButtonPressedEvent());
+                showDialog(
+                  context: context,
+                  builder: (content) {
+                    return ConfirmationDialog(
+                      onTapYes: () {
+                        context.read<UserAuthBloc>().add(
+                          SignOutButtonPressedEvent(),
+                        );
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const UserLogin(),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                      onTapNo: () => Navigator.of(context).pop(),
+                    );
+                  },
+                );
               },
             ),
           ),

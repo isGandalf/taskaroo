@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/text_fields.dart';
-import 'package:taskaroo/features/todo/presentation/bloc/todo_bloc.dart';
-import 'package:taskaroo/features/todo/presentation/widgets/add_action_button.dart';
+import 'package:taskaroo/features/todo/presentation/bloc/my_todo_bloc/todo_bloc.dart';
+import 'package:taskaroo/features/todo/presentation/widgets/my_task_widgets/add_action_button.dart';
 
 class AddAlertBox extends StatelessWidget {
   const AddAlertBox({

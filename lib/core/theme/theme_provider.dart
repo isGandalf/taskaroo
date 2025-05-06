@@ -1,33 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskaroo/core/global/global.dart';
 import 'package:taskaroo/core/theme/dark.dart';
 import 'package:taskaroo/core/theme/light.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  // initially dark theme
-  ThemeData _currentTheme = darkTheme;
+  // set default theme
+  ThemeData currentTheme = lightTheme;
 
-  // get current theme
-  ThemeData get getCurrentTheme {
-    return _currentTheme;
+  // when instantiated
+  ThemeProvider() {
+    loadSavedThemeFromLocal();
+    logger.d('Current theme is: ${currentTheme.brightness}');
   }
 
-  // check if current theme is lightTheme (helper)
-  bool get isLightTheme {
-    return _currentTheme == lightTheme;
-  }
+  // load saved theme
+  Future<void> loadSavedThemeFromLocal() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isLight = prefs.getBool('isLightTheme') ?? false;
+    final newTheme = isLight ? lightTheme : darkTheme;
 
-  // set theme
-  set setNewTheme(ThemeData themeData) {
-    _currentTheme = themeData;
-    notifyListeners();
-  }
-
-  // toggle theme
-  void toggleTheme() {
-    if (_currentTheme == lightTheme) {
-      setNewTheme = darkTheme;
-    } else {
-      setNewTheme = lightTheme;
+    if (newTheme != currentTheme) {
+      currentTheme = newTheme;
+      notifyListeners();
     }
+  }
+
+  // save theme to local
+  Future<void> saveThemeToLocal(ThemeData themeData) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLightTheme', themeData == lightTheme);
+  }
+
+  // getter method to get current theme
+  ThemeData get getCurrentTheme {
+    return currentTheme;
+  }
+
+  // toggle
+  void toggleTheme() {
+    if (currentTheme == lightTheme) {
+      currentTheme = darkTheme;
+    } else {
+      currentTheme = lightTheme;
+    }
+    saveThemeToLocal(currentTheme);
+    notifyListeners();
   }
 }

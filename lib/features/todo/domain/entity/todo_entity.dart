@@ -18,6 +18,8 @@ class ToDoEntity {
   final DateTime? updatedAt;
   final bool isCompleted;
   final bool isSynced;
+  final bool isShared;
+  final String? sharedWith;
 
   ToDoEntity({
     required this.id,
@@ -27,6 +29,8 @@ class ToDoEntity {
     this.updatedAt,
     this.isCompleted = false,
     this.isSynced = false,
+    this.isShared = false,
+    this.sharedWith,
   });
 
   ToDoEntity copyWith({
@@ -34,6 +38,8 @@ class ToDoEntity {
     DateTime? updatedAt,
     bool? isCompleted,
     bool? isSynced,
+    String? sharedWith,
+    bool? isShared,
   }) {
     return ToDoEntity(
       id: id,
@@ -43,6 +49,8 @@ class ToDoEntity {
       updatedAt: updatedAt ?? this.updatedAt,
       isCompleted: isCompleted ?? this.isCompleted,
       isSynced: isSynced ?? this.isSynced,
+      isShared: isShared ?? this.isShared,
+      sharedWith: sharedWith ?? this.sharedWith,
     );
   }
 }

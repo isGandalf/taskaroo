@@ -19,11 +19,15 @@ import 'package:taskaroo/features/auth/presentation/pages/homepage.dart';
 import 'package:taskaroo/features/auth/presentation/pages/user_login.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
 import 'package:taskaroo/features/todo/data/models/todo_model.dart';
+import 'package:taskaroo/features/todo/data/repository/shared_todo_data_repository.dart';
 import 'package:taskaroo/features/todo/data/repository/todo_data_repository.dart';
 import 'package:taskaroo/features/todo/data/source/isar_local_source.dart';
+import 'package:taskaroo/features/todo/data/source/isar_shared_todo.dart';
+import 'package:taskaroo/features/todo/domain/repository/shared_todo_domain_repository.dart';
 import 'package:taskaroo/features/todo/domain/repository/todo_domain_repository.dart';
 import 'package:taskaroo/features/todo/domain/usecase/todo_usecases.dart';
-import 'package:taskaroo/features/todo/presentation/bloc/todo_bloc.dart';
+import 'package:taskaroo/features/todo/presentation/bloc/my_todo_bloc/todo_bloc.dart';
+import 'package:taskaroo/features/todo/presentation/bloc/shared_todo_bloc/shared_todo_bloc.dart';
 import 'package:taskaroo/firebase_options.dart';
 
 void main() async {
@@ -77,12 +81,23 @@ void main() async {
     todoDomainRepository: todoDomainRepository,
   );
 
+  final isarSharedTodo = IsarSharedTodo(
+    db: isarDb,
+    firebaseFirestore: firebaseFirestore,
+  );
+  final sharedTodoDomainRepository = SharedTodoDataRepository(
+    isarSharedTodo: isarSharedTodo,
+  );
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         BlocProvider(create: (context) => UserAuthBloc(authUsecase)),
         BlocProvider(create: (context) => TodoBloc(todoUsecases)),
+        BlocProvider(
+          create: (context) => SharedTodoBloc(sharedTodoDomainRepository),
+        ),
       ],
       child: Taskaroo(currentUser: currentUser),
     ),
@@ -97,12 +112,12 @@ class Taskaroo extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: Provider.of<ThemeProvider>(context).getCurrentTheme,
+      theme: context.watch<ThemeProvider>().getCurrentTheme,
 
       /*
       For login page - We need two async operation (1) Stream for listening to user login status (2) Future for
       getting user data from firestore if user is logged it.
-
+    
       Steps:
         1. Check if user has already logged in. This is done by Streambuilder and listens to Firebase stream.
          -- FirebaseAuth.instance.authStateChanges()
@@ -114,7 +129,7 @@ class Taskaroo extends StatelessWidget {
         5. If data failed to receive from particular user, throw 'No data found' page.
         6. If data revived Map the data with usermodel.
         
-
+    
       */
       home:
           currentUser == null

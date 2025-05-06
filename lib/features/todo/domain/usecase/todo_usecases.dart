@@ -53,7 +53,9 @@ class TodoUsecases {
         ifRight: (models) => Right(models),
       );
     } catch (e) {
-      return Left(ToDoIsarFetchFailure(error: 'Unable to access todo list'));
+      return Left(
+        ToDoIsarFetchFailure(error: 'Unable to access todo list. -- $e'),
+      );
     }
   }
 
@@ -74,10 +76,11 @@ class TodoUsecases {
 
   // update an existing todo
   Future<Either<ToDoIsarUpdateFailure, void>> updateTodo(
-    ToDoEntity newTodo,
+    int id,
+    String content,
   ) async {
     try {
-      final todoFromEntity = await todoDomainRepository.updateToDo(newTodo);
+      final todoFromEntity = await todoDomainRepository.updateToDo(id, content);
       return todoFromEntity.fold(
         ifLeft: (failure) => Left(ToDoIsarUpdateFailure(error: failure.error)),
         ifRight: (model) => Right(model),
@@ -88,11 +91,9 @@ class TodoUsecases {
   }
 
   // delete todo
-  Future<Either<TodoIsarDeleteFailure, void>> deleteTodo(
-    ToDoEntity todo,
-  ) async {
+  Future<Either<TodoIsarDeleteFailure, void>> deleteTodo(int id) async {
     try {
-      final deleteTodo = await todoDomainRepository.deleteToDo(todo);
+      final deleteTodo = await todoDomainRepository.deleteToDo(id);
       return deleteTodo.fold(
         ifLeft: (failure) {
           logger.d('Delete failed: ${failure.error}');
@@ -106,13 +107,9 @@ class TodoUsecases {
   }
 
   // toggle completion
-  Future<Either<ToDoIsarUpdateFailure, void>> toggleCompletion(
-    ToDoEntity todo,
-  ) async {
+  Future<Either<ToDoIsarUpdateFailure, void>> toggleCompletion(int id) async {
     try {
-      final updatedTodo = await todoDomainRepository.toggleCompletionStatus(
-        todo,
-      );
+      final updatedTodo = await todoDomainRepository.toggleCompletionStatus(id);
 
       return updatedTodo.fold(
         ifLeft: (failure) => Left(ToDoIsarUpdateFailure(error: failure.error)),

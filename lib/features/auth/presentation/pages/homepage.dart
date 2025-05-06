@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaroo/features/auth/domain/entity/user_entity.dart';
 import 'package:taskaroo/features/auth/presentation/bloc/homepage/bloc/homepage_bloc.dart';
-import 'package:taskaroo/features/auth/presentation/pages/my_tasks_page.dart';
-import 'package:taskaroo/features/auth/presentation/pages/shared_tasks_page.dart';
+import 'package:taskaroo/features/todo/presentation/bloc/my_todo_bloc/todo_bloc.dart';
+import 'package:taskaroo/features/todo/presentation/bloc/shared_todo_bloc/shared_todo_bloc.dart';
+import 'package:taskaroo/features/todo/presentation/pages/my_tasks_page.dart';
+import 'package:taskaroo/features/todo/presentation/pages/shared_tasks_page.dart';
 
 class Homepage extends StatefulWidget {
   final UserEntity userEntity;
@@ -47,6 +49,13 @@ class _HomepageState extends State<Homepage> {
             setState(() {
               currentPage = value;
             });
+            if (value == 1) {
+              context.read<SharedTodoBloc>().add(
+                FetchSharedTodoFromCloudEvent(),
+              );
+            } else {
+              context.read<TodoBloc>().add(PushLocalTodosToCloudEvent());
+            }
           },
           currentIndex: currentPage,
         ),

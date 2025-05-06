@@ -32,18 +32,28 @@ const ToDoModelSchema = CollectionSchema(
       name: r'isCompleted',
       type: IsarType.bool,
     ),
-    r'isSynced': PropertySchema(
+    r'isShared': PropertySchema(
       id: 3,
+      name: r'isShared',
+      type: IsarType.bool,
+    ),
+    r'isSynced': PropertySchema(
+      id: 4,
       name: r'isSynced',
       type: IsarType.bool,
     ),
+    r'sharedWith': PropertySchema(
+      id: 5,
+      name: r'sharedWith',
+      type: IsarType.string,
+    ),
     r'updatedAt': PropertySchema(
-      id: 4,
+      id: 6,
       name: r'updatedAt',
       type: IsarType.dateTime,
     ),
     r'userId': PropertySchema(
-      id: 5,
+      id: 7,
       name: r'userId',
       type: IsarType.string,
     )
@@ -69,6 +79,12 @@ int _toDoModelEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.content.length * 3;
+  {
+    final value = object.sharedWith;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.userId.length * 3;
   return bytesCount;
 }
@@ -82,9 +98,11 @@ void _toDoModelSerialize(
   writer.writeString(offsets[0], object.content);
   writer.writeDateTime(offsets[1], object.createdAt);
   writer.writeBool(offsets[2], object.isCompleted);
-  writer.writeBool(offsets[3], object.isSynced);
-  writer.writeDateTime(offsets[4], object.updatedAt);
-  writer.writeString(offsets[5], object.userId);
+  writer.writeBool(offsets[3], object.isShared);
+  writer.writeBool(offsets[4], object.isSynced);
+  writer.writeString(offsets[5], object.sharedWith);
+  writer.writeDateTime(offsets[6], object.updatedAt);
+  writer.writeString(offsets[7], object.userId);
 }
 
 ToDoModel _toDoModelDeserialize(
@@ -98,9 +116,11 @@ ToDoModel _toDoModelDeserialize(
   object.createdAt = reader.readDateTime(offsets[1]);
   object.id = id;
   object.isCompleted = reader.readBool(offsets[2]);
-  object.isSynced = reader.readBool(offsets[3]);
-  object.updatedAt = reader.readDateTimeOrNull(offsets[4]);
-  object.userId = reader.readString(offsets[5]);
+  object.isShared = reader.readBool(offsets[3]);
+  object.isSynced = reader.readBool(offsets[4]);
+  object.sharedWith = reader.readStringOrNull(offsets[5]);
+  object.updatedAt = reader.readDateTimeOrNull(offsets[6]);
+  object.userId = reader.readString(offsets[7]);
   return object;
 }
 
@@ -120,8 +140,12 @@ P _toDoModelDeserializeProp<P>(
     case 3:
       return (reader.readBool(offset)) as P;
     case 4:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 5:
+      return (reader.readStringOrNull(offset)) as P;
+    case 6:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 7:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -467,12 +491,173 @@ extension ToDoModelQueryFilter
     });
   }
 
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> isSharedEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isShared',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> isSyncedEqualTo(
       bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'isSynced',
         value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> sharedWithIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'sharedWith',
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition>
+      sharedWithIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'sharedWith',
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> sharedWithEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sharedWith',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition>
+      sharedWithGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'sharedWith',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> sharedWithLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'sharedWith',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> sharedWithBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'sharedWith',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition>
+      sharedWithStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'sharedWith',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> sharedWithEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'sharedWith',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> sharedWithContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'sharedWith',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition> sharedWithMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'sharedWith',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition>
+      sharedWithIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sharedWith',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterFilterCondition>
+      sharedWithIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'sharedWith',
+        value: '',
       ));
     });
   }
@@ -722,6 +907,18 @@ extension ToDoModelQuerySortBy on QueryBuilder<ToDoModel, ToDoModel, QSortBy> {
     });
   }
 
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> sortByIsShared() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isShared', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> sortByIsSharedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isShared', Sort.desc);
+    });
+  }
+
   QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> sortByIsSynced() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isSynced', Sort.asc);
@@ -731,6 +928,18 @@ extension ToDoModelQuerySortBy on QueryBuilder<ToDoModel, ToDoModel, QSortBy> {
   QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> sortByIsSyncedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isSynced', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> sortBySharedWith() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sharedWith', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> sortBySharedWithDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sharedWith', Sort.desc);
     });
   }
 
@@ -809,6 +1018,18 @@ extension ToDoModelQuerySortThenBy
     });
   }
 
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> thenByIsShared() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isShared', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> thenByIsSharedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isShared', Sort.desc);
+    });
+  }
+
   QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> thenByIsSynced() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isSynced', Sort.asc);
@@ -818,6 +1039,18 @@ extension ToDoModelQuerySortThenBy
   QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> thenByIsSyncedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isSynced', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> thenBySharedWith() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sharedWith', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QAfterSortBy> thenBySharedWithDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sharedWith', Sort.desc);
     });
   }
 
@@ -867,9 +1100,22 @@ extension ToDoModelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<ToDoModel, ToDoModel, QDistinct> distinctByIsShared() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isShared');
+    });
+  }
+
   QueryBuilder<ToDoModel, ToDoModel, QDistinct> distinctByIsSynced() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isSynced');
+    });
+  }
+
+  QueryBuilder<ToDoModel, ToDoModel, QDistinct> distinctBySharedWith(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'sharedWith', caseSensitive: caseSensitive);
     });
   }
 
@@ -913,9 +1159,21 @@ extension ToDoModelQueryProperty
     });
   }
 
+  QueryBuilder<ToDoModel, bool, QQueryOperations> isSharedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isShared');
+    });
+  }
+
   QueryBuilder<ToDoModel, bool, QQueryOperations> isSyncedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isSynced');
+    });
+  }
+
+  QueryBuilder<ToDoModel, String?, QQueryOperations> sharedWithProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'sharedWith');
     });
   }
 

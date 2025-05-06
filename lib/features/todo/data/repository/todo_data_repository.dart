@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore: implementation_imports
 import 'package:dart_either/src/dart_either.dart';
 import 'package:taskaroo/core/errors/todo_errors.dart';
 import 'package:taskaroo/features/todo/data/source/isar_local_source.dart';
@@ -68,11 +69,9 @@ class TodoDataRepository implements TodoDomainRepository {
 
   // delete existing data
   @override
-  Future<Either<TodoIsarDeleteFailure, void>> deleteToDo(
-    ToDoEntity todo,
-  ) async {
+  Future<Either<TodoIsarDeleteFailure, void>> deleteToDo(int id) async {
     try {
-      final todoFromEntity = await isarLocalSource.deleteTodo(todo);
+      final todoFromEntity = await isarLocalSource.deleteTodo(id);
       return todoFromEntity.fold(
         ifLeft: (failure) => Left(failure),
         ifRight: (model) => Right(model),
@@ -85,10 +84,11 @@ class TodoDataRepository implements TodoDomainRepository {
   // update existing data
   @override
   Future<Either<ToDoIsarUpdateFailure, void>> updateToDo(
-    ToDoEntity todo,
+    int id,
+    String content,
   ) async {
     try {
-      final todoFromEntity = await isarLocalSource.updateTodo(todo);
+      final todoFromEntity = await isarLocalSource.updateTodo(id, content);
       return todoFromEntity.fold(
         ifLeft: (failure) => Left(failure),
         ifRight: (model) => Right(model),
@@ -103,10 +103,10 @@ class TodoDataRepository implements TodoDomainRepository {
   // update todo status
   @override
   Future<Either<ToDoIsarUpdateFailure, void>> toggleCompletionStatus(
-    ToDoEntity todo,
+    int id,
   ) async {
     try {
-      final updatedTodo = await isarLocalSource.updateCompletedStatus(todo);
+      final updatedTodo = await isarLocalSource.updateCompletedStatus(id);
       return updatedTodo.fold(
         ifLeft: (failure) => Left(ToDoIsarUpdateFailure(error: failure.error)),
         ifRight: (todo) => Right(todo),
@@ -117,26 +117,4 @@ class TodoDataRepository implements TodoDomainRepository {
       );
     }
   }
-
-  // @override
-  // Future<Either<TodoFirebaseSync, void>> cloudUpdate(ToDoEntity todo) async {
-  //   try {
-  //     final result = await isarLocalSource.cloudUpdate(todo);
-  //     return result.fold(
-  //       ifLeft:
-  //           (failure) => Left(
-  //             TodoFirebaseSync(
-  //               error: 'Firestore saving failure ${failure.error}',
-  //             ),
-  //           ),
-  //       ifRight: (_) => Right(null),
-  //     );
-  //   } catch (e) {
-  //     return Left(
-  //       TodoFirebaseSync(
-  //         error: 'Unexpected error storing data in firestore $e',
-  //       ),
-  //     );
-  //   }
-  // }
 }

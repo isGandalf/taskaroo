@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:taskaroo/features/todo/domain/entity/todo_entity.dart';
-import 'package:taskaroo/features/todo/presentation/widgets/delete_button.dart';
-import 'package:taskaroo/features/todo/presentation/widgets/edit_button.dart';
+import 'package:taskaroo/features/todo/presentation/widgets/common/edit_button.dart';
 
-class TodoItemOptions extends StatelessWidget {
-  const TodoItemOptions({super.key, required this.todoItem});
+class SharedTodoItemOption extends StatelessWidget {
+  const SharedTodoItemOption({super.key, required this.todoItem});
 
   final ToDoEntity todoItem;
 
@@ -15,9 +14,6 @@ class TodoItemOptions extends StatelessWidget {
       children: [
         // Edit
         EditButton(todoItem: todoItem),
-
-        // Delete todo
-        DeleteButton(todoItem: todoItem),
       ],
     );
   }

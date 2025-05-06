@@ -53,6 +53,7 @@ dependencies:
   expansion_tile_group: ^2.2.0
   meta: ^1.16.0
   bloc: ^9.0.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

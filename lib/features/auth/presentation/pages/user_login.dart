@@ -56,7 +56,6 @@ class _UserLoginState extends State<UserLogin> {
         // Upon successful login
         else if (state is LoginSuccessState) {
           showCustomSnackbar(context, 'Login success!', Colors.green.shade800);
-          await Future.delayed(Duration(seconds: 2));
           if (!context.mounted) return;
           //final userId = FirebaseAuth.instance.currentUser;
           Navigator.pushAndRemoveUntil(

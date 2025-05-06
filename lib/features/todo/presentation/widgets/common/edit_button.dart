@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaroo/core/global/global.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/text_fields.dart';
 import 'package:taskaroo/features/todo/domain/entity/todo_entity.dart';
-import 'package:taskaroo/features/todo/presentation/bloc/todo_bloc.dart';
-import 'package:taskaroo/features/todo/presentation/widgets/edit_action_button.dart';
+import 'package:taskaroo/features/todo/presentation/bloc/my_todo_bloc/todo_bloc.dart';
+import 'package:taskaroo/features/todo/presentation/bloc/shared_todo_bloc/shared_todo_bloc.dart';
+import 'package:taskaroo/features/todo/presentation/widgets/common/edit_action_button.dart';
 
 class EditButton extends StatelessWidget {
   final ToDoEntity todoItem;
@@ -16,6 +18,8 @@ class EditButton extends StatelessWidget {
     final TextEditingController todoContent = TextEditingController(
       text: todoItem.content,
     );
+    final isOwnedByMe =
+        FirebaseAuth.instance.currentUser?.uid == todoItem.userId;
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -56,16 +60,22 @@ class EditButton extends StatelessWidget {
                       EditActionButton(
                         icon: Icons.check,
                         onTap: () {
-                          logger.d('From ui: ${todoItem.createdAt}');
-                          context.read<TodoBloc>().add(
-                            EditTodoButtonPressedEvent(
-                              userId: todoItem.userId,
-                              content: todoContent.text,
-                              isCompleted: todoItem.isCompleted,
-                              id: todoItem.id,
-                              createdAt: todoItem.createdAt,
-                            ),
-                          );
+                          if (isOwnedByMe) {
+                            context.read<TodoBloc>().add(
+                              EditTodoButtonPressedEvent(
+                                content: todoContent.text,
+                                id: todoItem.id,
+                              ),
+                            );
+                          } else {
+                            context.read<SharedTodoBloc>().add(
+                              UpdateSharedTodoEvent(
+                                id: todoItem.id,
+                                content: todoContent.text,
+                              ),
+                            );
+                          }
+
                           Navigator.of(context).pop();
                         },
                         backgroundColor: Colors.blue.shade700,

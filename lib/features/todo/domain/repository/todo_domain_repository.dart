@@ -24,19 +24,20 @@ abstract interface class TodoDomainRepository {
   // Fetch
   Future<Either<ToDoIsarFetchFailure, List<ToDoEntity>>> fetchToDos();
 
-  // add / write
+  // add
   Future<Either<ToDoIsarWriteFailure, void>> addToDo(ToDoEntity newTodo);
 
-  // read / update
-  Future<Either<ToDoIsarUpdateFailure, void>> updateToDo(ToDoEntity todo);
+  // update
+  Future<Either<ToDoIsarUpdateFailure, void>> updateToDo(
+    int id,
+    String content,
+  );
 
   // delete
-  Future<Either<TodoIsarDeleteFailure, void>> deleteToDo(ToDoEntity todo);
+  Future<Either<TodoIsarDeleteFailure, void>> deleteToDo(int id);
 
   // update completion status
-  Future<Either<ToDoIsarUpdateFailure, void>> toggleCompletionStatus(
-    ToDoEntity todo,
-  );
+  Future<Either<ToDoIsarUpdateFailure, void>> toggleCompletionStatus(int id);
 
   // cloud sync
   // Future<Either<TodoFirebaseSync, void>> cloudUpdate(ToDoEntity todo);

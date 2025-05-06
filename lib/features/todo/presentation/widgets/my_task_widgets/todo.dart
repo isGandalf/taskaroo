@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaroo/core/global/global.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/auth_snackbar.dart';
-import 'package:taskaroo/features/todo/presentation/bloc/todo_bloc.dart';
-import 'package:taskaroo/features/todo/presentation/widgets/todo_list_view.dart';
+import 'package:taskaroo/features/todo/presentation/bloc/my_todo_bloc/todo_bloc.dart';
+import 'package:taskaroo/features/todo/presentation/widgets/my_task_widgets/todo_list_view.dart';
 
 class Todo extends StatelessWidget {
   const Todo({super.key});
@@ -14,7 +14,6 @@ class Todo extends StatelessWidget {
       listenWhen: (previous, current) => current is TodoActionState,
       buildWhen: (previous, current) => current is! TodoActionState,
       listener: (context, state) {
-        logger.d('listner: ${state.runtimeType}');
         if (state is AddTodoSucessState) {
           showCustomSnackbar(context, 'Task added', Colors.green.shade700);
           //logger.d(state.runtimeType);
@@ -45,7 +44,6 @@ class Todo extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        logger.d('Builder: ${state.runtimeType}');
         if (state is SyncingState) {
           return const Center(
             child: Column(

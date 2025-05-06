@@ -30,42 +30,21 @@ final class AddNewToDoButtonPressedEvent extends TodoEvent {
 // event triggered when exsisting todo is updated, editing the todo content
 final class EditTodoButtonPressedEvent extends TodoEvent {
   final int id;
-  final String userId;
   final String content;
-  final DateTime createdAt;
-  final bool isCompleted;
 
-  EditTodoButtonPressedEvent({
-    required this.id,
-    required this.userId,
-    required this.content,
-    required this.createdAt,
-    required this.isCompleted,
-  });
+  EditTodoButtonPressedEvent({required this.id, required this.content});
 }
 
 // event triggered when delete button is pressed
 final class DeleteTodoButtonPressedEvent extends TodoEvent {
-  final ToDoEntity todo;
+  final int id;
 
-  DeleteTodoButtonPressedEvent({required this.todo});
+  DeleteTodoButtonPressedEvent({required this.id});
 }
 
 // event triggered when todo needs to be marked completed
 final class ToggleTodoEvent extends TodoEvent {
   final int id;
-  final String userId;
-  final String content;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final bool isCompleted;
 
-  ToggleTodoEvent({
-    required this.id,
-    required this.userId,
-    required this.content,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.isCompleted,
-  });
+  ToggleTodoEvent({required this.id});
 }

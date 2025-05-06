@@ -37,17 +37,14 @@ final class LoadTodoListFailedState extends TodoState {}
 // Add todo success state
 final class AddTodoSucessState extends TodoActionState {}
 
-// Add todo failed state
 final class AddTodoFailedState extends TodoActionState {}
 
 // update todo success state
 final class UpdateTodoSucessState extends TodoActionState {}
 
-// update todo failed state
 final class UpdateTodoFailedState extends TodoActionState {}
 
 // toto delete success state
 final class DeleteTodoSucessState extends TodoActionState {}
 
-// todo delete failed state
 final class DeleteTodoFailedState extends TodoActionState {}

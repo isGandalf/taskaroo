@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskaroo/features/todo/domain/entity/todo_entity.dart';
-import 'package:taskaroo/features/todo/presentation/widgets/todo_tile.dart';
+import 'package:taskaroo/features/todo/presentation/widgets/common/todo_tile.dart';
 
 class TodoListView extends StatelessWidget {
   const TodoListView({super.key, required this.todos});

@@ -1,3 +1,4 @@
+// ignore: implementation_imports
 import 'package:dart_either/src/dart_either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:taskaroo/core/errors/firebase_errors.dart';

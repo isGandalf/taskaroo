@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:dart_either/dart_either.dart';
 import 'package:meta/meta.dart';
 
 import 'package:taskaroo/core/global/global.dart';
@@ -119,16 +120,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     ToggleTodoEvent event,
     Emitter<TodoState> emit,
   ) async {
-    logger.d(' Event = ${event.isCompleted}');
-    final getTodo = ToDoEntity(
-      id: event.id,
-      content: event.content,
-      userId: event.userId,
-      isCompleted: event.isCompleted,
-      createdAt: event.createdAt,
-      updatedAt: event.updatedAt,
-    );
-    final todoUpdated = await todoUsecases.toggleCompletion(getTodo);
+    final todoUpdated = await todoUsecases.toggleCompletion(event.id);
     final todoList = await todoUsecases.fetchToDos();
 
     return todoUpdated.fold(
@@ -147,7 +139,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     DeleteTodoButtonPressedEvent event,
     Emitter<TodoState> emit,
   ) async {
-    final result = await todoUsecases.deleteTodo(event.todo);
+    final result = await todoUsecases.deleteTodo(event.id);
     final todoList = await todoUsecases.fetchToDos();
 
     return result.fold(
@@ -167,15 +159,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     EditTodoButtonPressedEvent event,
     Emitter<TodoState> emit,
   ) async {
-    final newTodo = ToDoEntity(
-      id: event.id,
-      content: event.content,
-      userId: event.userId,
-      isCompleted: false,
-      createdAt: event.createdAt,
-    );
-
-    final newTodoAdded = await todoUsecases.updateTodo(newTodo);
+    final newTodoAdded = await todoUsecases.updateTodo(event.id, event.content);
     final todoList = await todoUsecases.fetchToDos();
 
     return newTodoAdded.fold(

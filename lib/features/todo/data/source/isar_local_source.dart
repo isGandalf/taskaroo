@@ -64,7 +64,7 @@ class IsarLocalSource {
                 .findAll();
 
         if (unSyncedList.isEmpty) {
-          logger.d('Empty list. Nothing to sync to cloud');
+          //logger.d('Empty list. Nothing to sync to cloud');
           return Right(null);
         }
 
@@ -88,15 +88,17 @@ class IsarLocalSource {
             'userId': userId,
             'id': todoItem.id,
             'createdAt': todoItem.createdAt,
+            'isShared': todoItem.isShared,
+            'sharedWith': todoItem.sharedWith,
           });
         }
         // push to cloud
         await batch.commit();
-        logger.d('Sync to cloud successful');
+        //logger.d('Sync to cloud successful');
       }
       return Right(null);
-    } on FirebaseException catch (e) {
-      logger.e('Log -- $e');
+    } on FirebaseException {
+      //logger.e('Log -- $e');
       return Left(ToDoIsarFetchFailure(error: 'Sync to cloud failed.'));
     }
   }
@@ -106,26 +108,17 @@ class IsarLocalSource {
     try {
       //get snapshot
       final userId = currentUser!.uid;
-      logger.d(
-        'Fetching data of $userId from cloud and will be saving to local.',
-      );
       final todosFromFirestore =
           await firebaseFirestore
               .collection('todos')
               .where('userId', isEqualTo: userId)
               .get();
 
-      if (todosFromFirestore.docs.isNotEmpty) {
-        logger.d('Data received --- ${todosFromFirestore.docs.length}');
-      }
-
       //get list of todos from snapshot
       final result =
           todosFromFirestore.docs.map((todoList) {
             try {
               final todoItem = todoList.data();
-
-              logger.d('Getting results -- $todoItem');
               return ToDoEntity(
                 id: todoItem['id'],
                 content: todoItem['content'],
@@ -137,6 +130,8 @@ class IsarLocalSource {
                         : null,
                 isCompleted: todoItem['isCompleted'],
                 isSynced: todoItem['isSynced'],
+                sharedWith: todoItem['sharedWith'],
+                isShared: todoList['isShared'],
               );
             } catch (e) {
               logger.e('Error parsing todoList: ${todoList.data()}, error: $e');
@@ -144,16 +139,10 @@ class IsarLocalSource {
             }
           }).toList();
 
-      logger.d('Result - $result');
-
-      if (result.isNotEmpty) {
-        logger.d('Result is not empty - $result');
-      }
-
       final todoList = await updateLocalDbWithCloudData(result);
       return todoList.fold(
         ifLeft: (failure) {
-          logger.e('From firebase: $failure');
+          //logger.e('From firebase: $failure');
           return Left(TodoFirebaseSync(error: failure.error));
         },
         ifRight: (_) => Right(null),
@@ -167,8 +156,6 @@ class IsarLocalSource {
   Future<Either<ToDoIsarWriteFailure, void>> updateLocalDbWithCloudData(
     List<ToDoEntity> todoList,
   ) async {
-    logger.d('Cloud todo list length: ${todoList.length}');
-
     try {
       await db.writeTxn(() async {
         final todoForIsar =
@@ -179,9 +166,6 @@ class IsarLocalSource {
         await db.toDoModels.putAll(todoForIsar);
       });
 
-      final allTodos = await db.toDoModels.where().findAll();
-      logger.d('Todos in local DB after update: $allTodos');
-
       return Right(null);
     } on Exception catch (e) {
       return Left(
@@ -189,32 +173,6 @@ class IsarLocalSource {
       );
     }
   }
-
-  // helper function to save the todo to cloud
-  // Future<Either<TodoFirebaseSync, void>> cloudUpdate(ToDoEntity todo) async {
-  //   try {
-  //     if (currentUser != null) {
-  //       final userId = currentUser!.uid;
-  //       await firebaseFirestore
-  //           .collection('todos')
-  //           .doc(todo.id.toString())
-  //           .set({
-  //             'id': todo.id,
-  //             'content': todo.content,
-  //             'createdAt': todo.createdAt,
-  //             'updatedAt': todo.updatedAt,
-  //             'ownerId': userId,
-  //             'isCompleted': todo.isCompleted,
-  //             'sharedWith': [],
-  //           });
-  //     }
-  //     logger.d('Firestore saving successful');
-  //     return Right(null);
-  //   } on FirebaseException catch (e) {
-  //     logger.e('Firestore exception $e');
-  //     return Left(TodoFirebaseSync(error: 'Failed to save in firestore: $e'));
-  //   }
-  // }
 
   /*     CRUD OPERATIONS     */
 
@@ -228,7 +186,7 @@ class IsarLocalSource {
           await db.toDoModels.filter().userIdEqualTo(userId).findAll();
 
       if (todoFromIsar.isEmpty) {
-        logger.d('Fetch todo - local list empty');
+        //logger.d('Fetch todo - local list empty');
         return Right([]);
       }
 
@@ -264,55 +222,45 @@ class IsarLocalSource {
 
   // U P D A T E (used in UI)
   Future<Either<ToDoIsarUpdateFailure, void>> updateTodo(
-    ToDoEntity todo,
+    int id,
+    String content,
   ) async {
     try {
-      if (currentUser != null) {
-        final now = DateTime.now();
-        // same as add new todo
-        final todoForIsar = ToDoModel.fromModelToIsar(todo);
-        todoForIsar.updatedAt = now;
+      final todoFromIsar = await db.toDoModels.get(id);
 
-        // set the value to false so that it can be synced to cloud.
-        todoForIsar.isSynced = false;
-
-        // update to isar
-        await db.writeTxn(() => db.toDoModels.put(todoForIsar));
+      if (todoFromIsar == null) {
+        return Left(ToDoIsarUpdateFailure(error: 'Todo not found'));
       }
+
+      final todo = todoFromIsar.toEntity();
+      final updated = todo.copyWith(
+        content: content,
+        isSynced: false,
+        updatedAt: DateTime.now(),
+        isCompleted: false,
+      );
+      final todoForIsar = ToDoModel.fromModelToIsar(updated);
+      await db.writeTxn(() => db.toDoModels.put(todoForIsar));
 
       return Right(null);
     } catch (e) {
-      return Left(ToDoIsarUpdateFailure(error: 'Update failed --- $e'));
+      return Left(ToDoIsarUpdateFailure(error: 'Failed to update todo: $e'));
     }
   }
 
   // D E L E T E  (used in UI)
-  Future<Either<TodoIsarDeleteFailure, void>> deleteTodo(
-    ToDoEntity todo,
-  ) async {
+  Future<Either<TodoIsarDeleteFailure, void>> deleteTodo(int id) async {
     try {
-      if (currentUser != null) {
-        final userId = currentUser!.uid;
-        final existingTodo = await db.toDoModels.get(todo.id);
-        if (existingTodo?.userId != userId) {
-          return Left(
-            TodoIsarDeleteFailure(
-              error:
-                  'Todo does not belong to user :: UserId - $userId and todo id - ${existingTodo?.id} ',
-            ),
-          );
-        }
-        await db.writeTxn(() => db.toDoModels.delete(todo.id));
-
-        // delete from cloud
-        firebaseFirestore
-            .collection('todos')
-            .doc(todo.id.toString())
-            .delete()
-            .catchError((e) {
-              logger.e('Unable to delete --- $e');
-            });
+      final todoFromIsar = await db.toDoModels.get(id);
+      if (todoFromIsar == null) {
+        return Left(TodoIsarDeleteFailure(error: 'No todo found'));
       }
+      await db.writeTxn(() => db.toDoModels.delete(id));
+      await firebaseFirestore
+          .collection('todos')
+          .doc(id.toString())
+          .delete()
+          .catchError((e) => logger.e('No todo in database -- $e'));
 
       return Right(null);
     } catch (e) {
@@ -322,28 +270,30 @@ class IsarLocalSource {
 
   // T O G G L E  (used in UI)
   Future<Either<ToDoIsarUpdateFailure, void>> updateCompletedStatus(
-    ToDoEntity todo,
+    int id,
   ) async {
     try {
-      if (currentUser != null) {
-        final now = DateTime.now();
-        final status = todo.isCompleted ? false : true;
+      final todoFromIsar = await db.toDoModels.get(id);
 
-        final updatedTodo = todo.copyWith(isCompleted: status, updatedAt: now);
-
-        final todoForIsar = ToDoModel.fromModelToIsar(updatedTodo);
-
-        // set the value to false so that it can be synced to cloud
-        todoForIsar.isSynced = false;
-
-        await db.writeTxn(() => db.toDoModels.put(todoForIsar));
+      if (todoFromIsar == null) {
+        return Left(ToDoIsarUpdateFailure(error: 'Todo not found'));
       }
 
+      final status = todoFromIsar.isCompleted == true ? false : true;
+
+      final todo = todoFromIsar.toEntity();
+      final updated = todo.copyWith(
+        isCompleted: status,
+        updatedAt: DateTime.now(),
+        isSynced: false,
+      );
+
+      final todoForIsar = ToDoModel.fromModelToIsar(updated);
+
+      await db.writeTxn(() => db.toDoModels.put(todoForIsar));
       return Right(null);
     } catch (e) {
-      return Left(
-        ToDoIsarUpdateFailure(error: 'Todo status update failed --- $e'),
-      );
+      return Left(ToDoIsarUpdateFailure(error: 'Toggle failed: $e'));
     }
   }
 }
