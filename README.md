@@ -2,7 +2,23 @@
 
 Taskaroo is a simple and efficient Todo App built with Flutter. It helps users manage their daily tasks through a clean and intuitive interface. The app supports user authentication, allows users to create, store, and sync todo tasks seamlessly across devices, and enables sharing tasks with others for collaboration.
 
-## Demo and screenshots
+## Demo and Screesnshots
+<table align="center" style="border-collapse: collapse;">
+  <tr>
+    <td align="center">
+      <img src="[https://github.com/isGandalf/nimbus_now/blob/main/Screenshot_20250308-141728.jpg](https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-193104.jpg)" width="250"><br>
+      <p align="center"><small>Sign Up</small></p>
+    </td>
+    <td align="center">
+      <img src="[https://github.com/isGandalf/nimbus_now/blob/main/citySearch.gif](https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-191004.jpg)" width="250"><br>
+      <p align="center"><small>My tasks page</small></p>
+    </td>
+    <td align="center">
+      <img src="[https://github.com/isGandalf/nimbus_now/blob/main/Hourlyforecast.gif](https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-191035.jpg)" width="250"><br>
+      <p align="center"><small>Dark theme</small></p>
+    </td>
+  </tr>
+</table>
 
 ## ✨ Features
 
