@@ -12,9 +12,9 @@ A simple app that will allow users to create, update, read and delete todo list.
 
 #### Steps to implement
 
-- [ ] Create folder structure for clean architecture.
-- [ ] Write Domain
-- [ ] Write Data
-- [ ] Write Presentation
-- [ ] Create theme 
+- [x] Create folder structure for clean architecture.
+- [x] Write Domain
+- [x] Write Data
+- [x] Write Presentation
+- [x] Create theme 
 
