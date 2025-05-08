@@ -9,6 +9,14 @@ Taskaroo is a simple and efficient Todo App built with Flutter. It helps users m
       <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-193104.jpg" width="250"><br>
       <p align="center"><small>Sign Up</small></p>
     </td>
+     <td align="center">
+      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-194431.jpg" width="250"><br>
+      <p align="center"><small>Drawer</small></p>
+    </td>
+    <td align="center">
+      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-194446.jpg" width="250"><br>
+      <p align="center"><small>My tasks page</small></p>
+    </td>
     <td align="center">
       <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-191004.jpg" width="250"><br>
       <p align="center"><small>My tasks page</small></p>
