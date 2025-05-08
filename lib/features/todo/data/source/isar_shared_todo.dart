@@ -198,7 +198,6 @@ class IsarSharedTodo {
       );
       final todoForIsar = ToDoModel.fromModelToIsar(updated);
       await db.writeTxn(() => db.toDoModels.put(todoForIsar));
-      pushLocalSharedTodosToCloud();
       return Right(null);
     } catch (e) {
       return Left(ToDoIsarUpdateFailure(error: 'unable to update todo -- $e'));
@@ -249,7 +248,6 @@ class IsarSharedTodo {
       );
       final todoForIsar = ToDoModel.fromModelToIsar(updated);
       await db.writeTxn(() => db.toDoModels.put(todoForIsar));
-      pushLocalSharedTodosToCloud();
       return Right(null);
     } catch (e) {
       return Left(ToDoIsarUpdateFailure(error: 'Unable to toggle todo --- $e'));
