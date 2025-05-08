@@ -6,23 +6,23 @@ Taskaroo is a simple and efficient Todo App built with Flutter. It helps users m
 <table align="center" style="border-collapse: collapse;">
   <tr>
     <td align="center">
-      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-193104.jpg" width="350"><br>
+      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-193104.jpg" width="450"><br>
       <p align="center"><small>Sign Up</small></p>
     </td>
      <td align="center">
-      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-194431.jpg" width="350"><br>
+      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-194431.jpg" width="450"><br>
       <p align="center"><small>Drawer</small></p>
     </td>
     <td align="center">
-      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-194446.jpg" width="350"><br>
+      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-194446.jpg" width="450"><br>
       <p align="center"><small>My tasks page</small></p>
     </td>
     <td align="center">
-      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-191004.jpg" width="350"><br>
+      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-191004.jpg" width="450"><br>
       <p align="center"><small>My tasks page</small></p>
     </td>
     <td align="center">
-      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-191035.jpg" width="350"><br>
+      <img src="https://github.com/isGandalf/taskaroo/blob/main/projectimages/Screenshot_20250508-191035.jpg" width="450"><br>
       <p align="center"><small>Dark theme</small></p>
     </td>
   </tr>
