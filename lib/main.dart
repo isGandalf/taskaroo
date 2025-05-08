@@ -23,7 +23,6 @@ import 'package:taskaroo/features/todo/data/repository/shared_todo_data_reposito
 import 'package:taskaroo/features/todo/data/repository/todo_data_repository.dart';
 import 'package:taskaroo/features/todo/data/source/isar_local_source.dart';
 import 'package:taskaroo/features/todo/data/source/isar_shared_todo.dart';
-import 'package:taskaroo/features/todo/domain/repository/shared_todo_domain_repository.dart';
 import 'package:taskaroo/features/todo/domain/repository/todo_domain_repository.dart';
 import 'package:taskaroo/features/todo/domain/usecase/todo_usecases.dart';
 import 'package:taskaroo/features/todo/presentation/bloc/my_todo_bloc/todo_bloc.dart';

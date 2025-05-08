@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:dart_either/dart_either.dart';
 import 'package:meta/meta.dart';
 
 import 'package:taskaroo/core/global/global.dart';

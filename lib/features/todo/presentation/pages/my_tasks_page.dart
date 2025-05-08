@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taskaroo/core/global/global.dart';
 import 'package:taskaroo/features/auth/presentation/bloc/homepage/bloc/homepage_bloc.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/custom_drawer.dart';
 import 'package:taskaroo/features/auth/presentation/widgets/sync_button.dart';

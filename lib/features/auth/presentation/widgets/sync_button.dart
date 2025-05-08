@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taskaroo/core/theme/light.dart';
-import 'package:taskaroo/core/theme/theme_provider.dart';
 import 'package:taskaroo/features/todo/presentation/bloc/my_todo_bloc/todo_bloc.dart';
 import 'package:taskaroo/features/todo/presentation/bloc/shared_todo_bloc/shared_todo_bloc.dart';
 
